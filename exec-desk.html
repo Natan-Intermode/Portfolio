@@ -60,7 +60,7 @@ h1{font-size:26px;font-weight:700;display:flex;align-items:center;gap:10px;flex-
 .kpi .l{display:flex;justify-content:space-between;color:var(--mut);font-size:12px}
 .kpi .n{font-size:30px;font-weight:700;margin:10px 0 4px}.kpi .m{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
 .kpi .f{color:var(--mut);font-size:11px;margin-top:10px}.kpi .pill{font-size:11px}
-.row2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
+.row2{display:grid;grid-template-columns:var(--cols,2fr 1fr);gap:14px;margin-top:14px}
 .card h3{font-size:16px;font-weight:600}.card .s{color:var(--mut);font-size:12px;margin:2px 0 14px}
 .scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:560px}
 th{text-align:left;font-size:10px;letter-spacing:.06em;color:var(--mut);font-weight:600;padding:0 8px 8px 0;text-transform:uppercase}
@@ -104,6 +104,10 @@ select.st option{color:#000;background:#fff}
 #cookie p{flex:1;min-width:220px;font-size:13px}
 .doc h4{margin:14px 0 4px;font-size:14px}.doc p,.doc li{color:var(--mut);font-size:13px;margin-bottom:6px}.doc ul{padding-left:18px}
 .modal.wide{max-width:640px}
+.k-small .kpi{padding:12px}.k-small .kpi .n{font-size:22px;margin:6px 0 2px}
+.k-large .kpi{padding:26px 22px}.k-large .kpi .n{font-size:40px;margin:14px 0 8px}
+.fld input[type=range]{width:100%;accent-color:var(--acc)}.fld input[type=file]{max-width:100%}
+.fld select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
 </style>
 </head>
 <body data-theme="navy">
@@ -116,26 +120,25 @@ select.st option{color:#000;background:#fff}
 </aside>
 <main id="main" tabindex="-1">
   <div class="top">
-    <div class="crumb"><svg class="i" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg><span>Lier Consig Dashboard</span></div>
+    <div class="crumb"><svg class="i" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg><span id="crumbT">Lier Consig Dashboard</span></div>
     <div class="tools">
       <span class="upd">Sample data</span>
       <button class="chip" id="themeBtn"></button>
       <button class="chip" id="signOut">Sign out</button>
       <button class="bellb" id="bell" aria-label="Notifications"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><b id="bellN">0</b></button>
+      <button class="bellb" id="editBtn" hidden aria-label="Edit dashboard" title="Edit dashboard"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
     </div>
   </div>
 
   <div id="dash">
     <div class="head">
-      <div><h1>Lier Consig Dashboard</h1><p>Your business at a glance. Performance, priorities, and the signals that matter.</p></div>
+      <div><h1 id="pageTitle">Lier Consig Dashboard</h1><p>Your business at a glance. Performance, priorities, and the signals that matter.</p></div>
       <div class="clock"><small id="cdate"></small><div class="cities" id="cities"></div><div class="hint">Click a city to change it</div></div>
     </div>
 
     <section class="cover" id="cover">
       <svg class="av" viewBox="0 0 100 100"><circle cx="50" cy="26" r="20"/><path d="M8 98c0-22 14-40 42-40s42 18 42 40z"/><path d="M50 58l-7 10 7 22 7-22z" fill="#0a2a5a"/></svg>
-      <div><h2>Lier Consig</h2><p>Chief Executive Officer &amp; Co-Founder</p></div>
-      <div class="cbtn"><button id="cPick">Change cover photo</button><button id="cReset">Reset</button></div>
-      <input type="file" id="cFile" accept="image/*" hidden>
+      <div><h2 id="cName">Lier Consig</h2><p id="cRole">Chief Executive Officer &amp; Co-Founder</p></div>
     </section>
 
     <div class="filters">
@@ -145,14 +148,14 @@ select.st option{color:#000;background:#fff}
 
     <div class="grid4" id="kpis"></div>
 
-    <div class="row2">
+    <div class="row2" id="row1">
       <section class="card"><h3>Executive task tracker</h3><p class="s">Tasks, approvals, and follow-ups for the executive team</p>
         <div class="scroll"><table><thead><tr><th>Task</th><th>Due date</th><th>Owner</th><th>Status</th></tr></thead><tbody id="tasks"></tbody></table></div></section>
       <section class="card"><div style="display:flex;justify-content:space-between"><h3>Next meeting</h3><span class="badge">3</span></div><p class="s">Executive review · 11:30 AM · Jordan Lee</p><div id="meets"></div>
         <button class="link" id="agenda">View meeting agenda →</button></section>
     </div>
 
-    <div class="row2">
+    <div class="row2" id="row2">
       <section class="card"><div style="display:flex;justify-content:space-between"><div><h3>Meeting logs</h3><p class="s">Recent discussions, action items, and follow-up owners</p></div><button class="link" id="allLogs">View all logs ↗</button></div>
         <div class="scroll"><table><thead><tr><th>Meeting</th><th>Date</th><th>Owner</th><th>Status</th><th>Action items</th><th>Notes</th></tr></thead><tbody id="logs"></tbody></table></div>
         <div class="foot"><span>4 recent meetings</span><span style="color:var(--warn)">1 urgent follow-up</span></div></section>
@@ -196,7 +199,7 @@ $("#themeBtn").onclick=()=>{openModal('<h3>Choose a color theme</h3><div class="
 const veil=$("#veil");
 let lastF;
 function openModal(h,wide){lastF=document.activeElement;const m=$("#modal");m.className="modal"+(wide?" wide":"");m.innerHTML=h+'<div class="acts"><button class="btn" data-x>Close</button></div>';veil.classList.add("on");m.querySelector("[data-x]").onclick=closeModal;m.tabIndex=-1;m.focus()}
-function closeModal(){veil.classList.remove("on");if(lastF&&lastF.focus)lastF.focus()}
+function closeModal(){if(editing){editing=false;CFG=snap;applyCfg()}veil.classList.remove("on");if(lastF&&lastF.focus)lastF.focus()}
 veil.onclick=e=>{if(e.target===veil)closeModal()};
 document.addEventListener("keydown",e=>{if(!veil.classList.contains("on"))return;if(e.key==="Escape")closeModal();if(e.key==="Tab"){const m=$("#modal"),f=[...m.querySelectorAll("button,a[href],input,select")].filter(x=>!x.disabled);if(!f.length)return;const a=f[0],z=f[f.length-1],c=document.activeElement;if(e.shiftKey&&(c===a||c===m)){e.preventDefault();z.focus()}else if(!e.shiftKey&&c===z){e.preventDefault();a.focus()}}});
 
@@ -218,13 +221,53 @@ function buildClock(){$("#cities").innerHTML=slots.map((c,i)=>`<button data-i="$
 function tick(){document.querySelectorAll("#cities .t").forEach((s,i)=>s.textContent=hm(CITIES[slots[i]][2]));
   $("#cdate").textContent="WORLD CLOCK · "+new Intl.DateTimeFormat("en-US",{timeZone:CITIES[slots[0]][2],weekday:"short",month:"short",day:"2-digit"}).format(new Date()).toUpperCase()}
 
-/* cover photo */
+/* owner settings */
 const cover=$("#cover");
-function setCover(u){cover.style.backgroundImage=u?`url(${u})`:"";cover.classList.toggle("img",!!u)}
-setCover(store.get("cover",""));
-$("#cPick").onclick=()=>$("#cFile").click();
-$("#cReset").onclick=()=>{store.set("cover","");setCover("")};
-$("#cFile").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const w=Math.min(1400,im.width),c=document.createElement("canvas");c.width=w;c.height=im.height*w/im.width;c.getContext("2d").drawImage(im,0,0,c.width,c.height);const u=c.toDataURL("image/jpeg",.8);store.set("cover",u);setCover(u)};im.src=r.result};r.readAsDataURL(f)};
+const DEF={name:"Lier Consig",role:"Chief Executive Officer & Co-Founder",coverH:170,coverY:50,cover:"",kpi:"regular",row1:"2fr 1fr",row2:"2fr 1fr"};
+let CFG={...DEF,cover:store.get("cover",""),...store.get("cfg",{})},editing=false,snap=null;
+const SIZES={"3fr 1fr":"Much wider list","2fr 1fr":"Wider list","1fr 1fr":"Equal"};
+function applyCfg(){
+  $("#cName").textContent=CFG.name;$("#cRole").textContent=CFG.role;
+  const t=CFG.name+" Dashboard";$("#pageTitle").textContent=t;$("#crumbT").textContent=t;document.title=t;
+  cover.style.minHeight=CFG.coverH+"px";cover.style.backgroundPosition="50% "+CFG.coverY+"%";
+  cover.style.backgroundImage=CFG.cover?`url(${CFG.cover})`:"";cover.classList.toggle("img",!!CFG.cover);
+  $("#kpis").className="grid4 k-"+CFG.kpi;
+  $("#row1").style.setProperty("--cols",CFG.row1);$("#row2").style.setProperty("--cols",CFG.row2);
+}
+function shrink(file,done){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{let w=Math.min(1200,im.width),q=.7,u;const c=document.createElement("canvas");for(;;){c.width=w;c.height=Math.round(im.height*w/im.width);c.getContext("2d").drawImage(im,0,0,c.width,c.height);u=c.toDataURL("image/jpeg",q);if(u.length<260000||w<500)break;w=Math.round(w*.8);q=.6}done(u)};im.onerror=()=>done(null);im.src=r.result};r.readAsDataURL(file)}
+function editPanel(){
+  if(role!=="owner")return;
+  snap={...CFG};editing=true;
+  const opt=(o,v)=>Object.keys(o).map(k=>`<option value="${k}"${k===v?" selected":""}>${o[k]}</option>`).join("");
+  openModal(`<h3>Edit dashboard</h3><p>Only you, the owner, can change this. Clients see the result but cannot edit it. Close without saving to undo.</p><form id="ef">
+<div class="fld"><label for="en">Name</label><input id="en" type="text" maxlength="40" required value="${esc(CFG.name)}"></div>
+<div class="fld"><label for="er">Title under the name</label><input id="er" type="text" maxlength="70" value="${esc(CFG.role)}"></div>
+<div class="fld"><label for="eh">Cover height</label><input id="eh" type="range" min="100" max="320" step="10" value="${CFG.coverH}"></div>
+<div class="fld"><label for="ey">Cover photo position, top to bottom</label><input id="ey" type="range" min="0" max="100" value="${CFG.coverY}"></div>
+<div class="fld"><label for="ep">Cover photo</label><input id="ep" type="file" accept="image/*"> <button type="button" class="link" id="erm">Remove photo</button><div class="hint2" id="eph" aria-live="polite"></div></div>
+<div class="fld"><label for="ek">Summary card size</label><select id="ek">${opt({small:"Compact",regular:"Regular",large:"Large"},CFG.kpi)}</select></div>
+<div class="fld"><label for="e1">Task tracker row</label><select id="e1">${opt(SIZES,CFG.row1)}</select></div>
+<div class="fld"><label for="e2">Meeting logs row</label><select id="e2">${opt(SIZES,CFG.row2)}</select></div>
+<p class="err" id="eerr" role="alert"></p><button class="btn" type="submit">Save</button></form>`,true);
+  const on=(id,ev,fn)=>$(id).addEventListener(ev,fn);
+  on("#en","input",e=>{CFG.name=e.target.value;applyCfg()});
+  on("#er","input",e=>{CFG.role=e.target.value;applyCfg()});
+  on("#eh","input",e=>{CFG.coverH=+e.target.value;applyCfg()});
+  on("#ey","input",e=>{CFG.coverY=+e.target.value;applyCfg()});
+  on("#ek","change",e=>{CFG.kpi=e.target.value;applyCfg()});
+  on("#e1","change",e=>{CFG.row1=e.target.value;applyCfg()});
+  on("#e2","change",e=>{CFG.row2=e.target.value;applyCfg()});
+  on("#erm","click",()=>{CFG.cover="";applyCfg()});
+  on("#ep","change",e=>{const f=e.target.files[0];if(!f)return;shrink(f,u=>{if(!u){$("#eph").textContent="That file could not be read as an image.";return}CFG.cover=u;applyCfg();$("#eph").textContent="Photo ready. Press Save to keep it."})});
+  on("#ef","submit",async e=>{e.preventDefault();CFG.name=(CFG.name||"").trim()||DEF.name;applyCfg();store.set("cfg",CFG);editing=false;
+    if(!DEMO){const {error}=await sb.from("app_settings").upsert({id:1,data:CFG,updated_at:new Date().toISOString()});
+      if(error){$("#eerr").textContent="Saved on this device only. Clients will not see it until the settings table exists in Supabase.";return}}
+    closeModal()});
+  $("#en").focus();
+}
+$("#editBtn").onclick=editPanel;
+async function loadCfg(){if(DEMO||!sb)return;const {data,error}=await sb.from("app_settings").select("data").eq("id",1).maybeSingle();if(!error&&data&&data.data){CFG={...DEF,...data.data};applyCfg()}}
+applyCfg();
 
 /* filters */
 $("#range").textContent="Oct 1 – Oct 31, 2026";
@@ -260,7 +303,7 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const DRAFT="<p><b>Draft template.</b> Have it reviewed against the laws that apply to you before real clients use the app.</p>";
 const DOCS={
 privacy:["Privacy Policy",DRAFT+`<h4>Who runs this app</h4><p>${CONFIG.owner}. Contact: ${MAIL}.</p>
-<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
+<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
 <h4>Why we use it</h4><p>To create your account, check your invitation, show you your own workspace, and send reminders you ask for. We do not use it for advertising and we do not sell it.</p>
 <h4>Who else handles it</h4><ul><li>Supabase: database and sign-in.</li><li>GitHub Pages: hosts this page.</li><li>jsDelivr: delivers a script library to your browser, so it can see your IP address.</li></ul><p>These providers may keep technical logs, such as IP addresses.</p>
 <h4>How long we keep it</h4><p>While your account exists. Ask us to delete it and we will remove your account and its invitation record.</p>
@@ -277,7 +320,7 @@ terms:["Terms and Conditions",DRAFT+`<h4>Using the app</h4><p>Access is by invit
 <h4>Cost</h4><p>The app itself does not charge you. If that changes, we will tell you first.</p>
 <h4>Contact and governing law</h4><p>Questions: ${MAIL}. Governing law: [add the country whose law applies].</p>`],
 cookies:["Cookie Policy",DRAFT+`<h4>What this app stores in your browser</h4><p>This app uses browser storage. It does not use advertising or tracking cookies. Everything below is needed for the app to work or to remember your choices.</p>
-<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cover</b>: your color theme, your world clock cities and your cover photo.</li><li><b>ed.tasks</b>: sample task statuses in the demo.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
+<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cfg</b>: your color theme, your world clock cities and, on the owner's device, a copy of the dashboard settings.</li><li><b>ed.tasks</b>: sample task statuses in the demo.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
 <h4>What we do not use</h4><p>No analytics, no advertising and no social media trackers.</p>
 <h4>Your choices</h4><p>Sign out to remove the session. You can clear the rest in your browser settings, and the app will forget your preferences. Because this storage is essential, there is nothing to switch off. If we add anything optional later, we will ask first.</p>`]};
 function openDoc(k){openModal("<h3>"+DOCS[k][0]+'</h3><div class="doc">'+DOCS[k][1]+"</div>",true)}
@@ -333,7 +376,7 @@ async function route(){
   role=data&&data.role;
   if(role==="client"||role==="owner")unlock();else gate("code");
 }
-function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#main").focus()}
+function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#editBtn").hidden=role!=="owner";loadCfg();$("#main").focus()}
 async function signOut(){if(sb)await sb.auth.signOut();role=null;$("#app").hidden=true;gate(DEMO?"signup":"login")}
 $("#signOut").onclick=signOut;
 async function start(){
