@@ -37,14 +37,14 @@ h1{font-size:26px;font-weight:700;display:flex;align-items:center;gap:10px;flex-
 .head p{color:var(--mut);margin-top:4px}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
 .live{--c:var(--good);font-size:10px;letter-spacing:.06em}
-.clock{background:linear-gradient(135deg,var(--clock),var(--clock2));color:#fff;border-radius:16px;padding:16px 22px;min-width:420px}
+.clock{background:linear-gradient(135deg,var(--clock),var(--clock2));color:#fff;border-radius:16px;padding:16px 22px;width:420px;flex:none;margin-left:auto;display:flex;flex-direction:column;justify-content:center}
 .clock>small{font-size:11px;letter-spacing:.08em;opacity:.85;display:block;margin-bottom:6px}
 .cities{display:flex;gap:10px}
 .cities button{flex:1;text-align:left;padding:6px 10px;border-radius:10px;color:#fff}.cities button:hover{background:#ffffff1f}
 .cities small{display:block;font-size:12px;font-weight:600;opacity:.85}
 .t{font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15}
 .hint{font-size:11px;opacity:.7;margin-top:4px}
-.cover{margin-top:18px;border-radius:16px;min-height:170px;padding:22px 26px;background:linear-gradient(120deg,var(--cv1),var(--cv2)) center/cover;color:#fff;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.cover{flex:0 0 calc((100% - 434px)*var(--cw,1));min-width:0;border-radius:16px;min-height:170px;padding:22px 26px;background:linear-gradient(120deg,var(--cv1),var(--cv2)) center/cover;color:#fff;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
 .cover.img::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#001633cc,#00163355)}
 .cover>*{position:relative}.cover svg.av{width:84px;fill:var(--cav);flex:none}
 .cover h2{font-size:34px;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:1}
@@ -108,6 +108,14 @@ select.st option{color:#000;background:#fff}
 .k-large .kpi{padding:26px 22px}.k-large .kpi .n{font-size:40px;margin:14px 0 8px}
 .fld input[type=range]{width:100%;accent-color:var(--acc)}.fld input[type=file]{max-width:100%}
 .fld select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+.hero{display:flex;gap:14px;align-items:stretch;margin-top:12px}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick button{border:1px solid var(--line);background:var(--card);padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600}.quick button:hover{border-color:var(--acc);color:var(--acc)}
+.tiles{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px}
+.tiles button{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:16px 12px;font-weight:600;text-align:left;min-height:72px}.tiles button:hover,.tiles button.on{border-color:var(--acc);color:var(--acc)}
+.fol{margin-top:12px}.docs{list-style:none;padding:0;margin:8px 0}.docs li{display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid var(--line);flex-wrap:wrap}.docs li span{flex:1;min-width:140px}.docs small{color:var(--mut)}
+.addf{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}.addf input[type=text],.addf input[type=url]{flex:1;min-width:160px;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}.addf .btn{padding:9px 16px}
+@media(max-width:1000px){.hero{flex-direction:column}.cover{flex:none;width:100%}.clock{width:100%}}
 </style>
 </head>
 <body data-theme="navy">
@@ -133,17 +141,17 @@ select.st option{color:#000;background:#fff}
   <div id="dash">
     <div class="head">
       <div><h1 id="pageTitle">Lier Consig Dashboard</h1><p>Your business at a glance. Performance, priorities, and the signals that matter.</p></div>
-      <div class="clock"><small id="cdate"></small><div class="cities" id="cities"></div><div class="hint">Click a city to change it</div></div>
+      
     </div>
 
-    <section class="cover" id="cover">
+    <div class="hero"><section class="cover" id="cover">
       <svg class="av" viewBox="0 0 100 100"><circle cx="50" cy="26" r="20"/><path d="M8 98c0-22 14-40 42-40s42 18 42 40z"/><path d="M50 58l-7 10 7 22 7-22z" fill="#0a2a5a"/></svg>
       <div><h2 id="cName">Lier Consig</h2><p id="cRole">Chief Executive Officer &amp; Co-Founder</p></div>
-    </section>
+    </section><div class="clock"><small id="cdate"></small><div class="cities" id="cities"></div><div class="hint">Click a city to change it</div></div></div>
 
     <div class="filters">
       <span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M3 5h18v16H3zM3 10h18M8 3v4M16 3v4"/></svg><span id="range"></span></span>
-      <span class="chip"><select aria-label="Business units"><option>All business units</option><option>Operations</option><option>Finance</option><option>People</option></select></span>
+      <div class="quick" id="quick"></div>
     </div>
 
     <div class="grid4" id="kpis"></div>
@@ -208,7 +216,7 @@ const nav=$("#nav");
 NAV.slice(0,8).forEach((n,i)=>{const b=document.createElement("button");b.innerHTML=ic(n[1])+n[0];b.onclick=()=>show(i);nav.appendChild(b)});
 $("#subBtn").onclick=()=>show(8);
 const OCARD=$("#oCard").innerHTML;
-function show(i){[...nav.children].forEach((b,j)=>b.classList.toggle("on",j===i));const d=i===0;$("#dash").hidden=!d;$("#other").hidden=d;if(!d){$("#oT").textContent=NAV[i][0];$("#oD").textContent=NAV[i][2];if(i===3)inviteUI();else $("#oCard").innerHTML=OCARD}window.scrollTo(0,0)}
+function show(i){[...nav.children].forEach((b,j)=>b.classList.toggle("on",j===i));const d=i===0;$("#dash").hidden=!d;$("#other").hidden=d;if(!d){$("#oT").textContent=i===7?"Executive File":NAV[i][0];$("#oD").textContent=NAV[i][2];if(i===3)inviteUI();else if(i===7)fileUI();else $("#oCard").innerHTML=OCARD}window.scrollTo(0,0)}
 show(0);
 
 /* world clock */
@@ -223,13 +231,13 @@ function tick(){document.querySelectorAll("#cities .t").forEach((s,i)=>s.textCon
 
 /* owner settings */
 const cover=$("#cover");
-const DEF={name:"Lier Consig",role:"Chief Executive Officer & Co-Founder",coverH:170,coverY:50,cover:"",kpi:"regular",row1:"2fr 1fr",row2:"2fr 1fr"};
+const DEF={name:"Lier Consig",role:"Chief Executive Officer & Co-Founder",coverH:170,coverW:100,coverY:50,cover:"",kpi:"regular",row1:"2fr 1fr",row2:"2fr 1fr"};
 let CFG={...DEF,cover:store.get("cover",""),...store.get("cfg",{})},editing=false,snap=null;
 const SIZES={"3fr 1fr":"Much wider list","2fr 1fr":"Wider list","1fr 1fr":"Equal"};
 function applyCfg(){
   $("#cName").textContent=CFG.name;$("#cRole").textContent=CFG.role;
   const t=CFG.name+" Dashboard";$("#pageTitle").textContent=t;$("#crumbT").textContent=t;document.title=t;
-  cover.style.minHeight=CFG.coverH+"px";cover.style.backgroundPosition="50% "+CFG.coverY+"%";
+  cover.style.minHeight=CFG.coverH+"px";cover.style.setProperty("--cw",CFG.coverW/100);cover.style.backgroundPosition="50% "+CFG.coverY+"%";
   cover.style.backgroundImage=CFG.cover?`url(${CFG.cover})`:"";cover.classList.toggle("img",!!CFG.cover);
   $("#kpis").className="grid4 k-"+CFG.kpi;
   $("#row1").style.setProperty("--cols",CFG.row1);$("#row2").style.setProperty("--cols",CFG.row2);
@@ -243,6 +251,7 @@ function editPanel(){
 <div class="fld"><label for="en">Name</label><input id="en" type="text" maxlength="40" required value="${esc(CFG.name)}"></div>
 <div class="fld"><label for="er">Title under the name</label><input id="er" type="text" maxlength="70" value="${esc(CFG.role)}"></div>
 <div class="fld"><label for="eh">Cover height</label><input id="eh" type="range" min="100" max="320" step="10" value="${CFG.coverH}"></div>
+<div class="fld"><label for="ew">Cover width (length)</label><input id="ew" type="range" min="30" max="100" step="5" value="${CFG.coverW}"></div>
 <div class="fld"><label for="ey">Cover photo position, top to bottom</label><input id="ey" type="range" min="0" max="100" value="${CFG.coverY}"></div>
 <div class="fld"><label for="ep">Cover photo</label><input id="ep" type="file" accept="image/*"> <button type="button" class="link" id="erm">Remove photo</button><div class="hint2" id="eph" aria-live="polite"></div></div>
 <div class="fld"><label for="ek">Summary card size</label><select id="ek">${opt({small:"Compact",regular:"Regular",large:"Large"},CFG.kpi)}</select></div>
@@ -253,21 +262,89 @@ function editPanel(){
   on("#en","input",e=>{CFG.name=e.target.value;applyCfg()});
   on("#er","input",e=>{CFG.role=e.target.value;applyCfg()});
   on("#eh","input",e=>{CFG.coverH=+e.target.value;applyCfg()});
+  on("#ew","input",e=>{CFG.coverW=+e.target.value;applyCfg()});
   on("#ey","input",e=>{CFG.coverY=+e.target.value;applyCfg()});
   on("#ek","change",e=>{CFG.kpi=e.target.value;applyCfg()});
   on("#e1","change",e=>{CFG.row1=e.target.value;applyCfg()});
   on("#e2","change",e=>{CFG.row2=e.target.value;applyCfg()});
   on("#erm","click",()=>{CFG.cover="";applyCfg()});
   on("#ep","change",e=>{const f=e.target.files[0];if(!f)return;shrink(f,u=>{if(!u){$("#eph").textContent="That file could not be read as an image.";return}CFG.cover=u;applyCfg();$("#eph").textContent="Photo ready. Press Save to keep it."})});
-  on("#ef","submit",async e=>{e.preventDefault();CFG.name=(CFG.name||"").trim()||DEF.name;applyCfg();store.set("cfg",CFG);editing=false;
-    if(!DEMO){const {error}=await sb.from("app_settings").upsert({id:1,data:CFG,updated_at:new Date().toISOString()});
-      if(error){$("#eerr").textContent="Saved on this device only. Clients will not see it until the settings table exists in Supabase.";return}}
-    closeModal()});
+  on("#ef","submit",async e=>{e.preventDefault();CFG.name=(CFG.name||"").trim()||DEF.name;applyCfg();editing=false;const m=await persistCfg();if(m){$("#eerr").textContent=m;return}closeModal()});
   $("#en").focus();
 }
 $("#editBtn").onclick=editPanel;
 async function loadCfg(){if(DEMO||!sb)return;const {data,error}=await sb.from("app_settings").select("data").eq("id",1).maybeSingle();if(!error&&data&&data.data){CFG={...DEF,...data.data};applyCfg()}}
 applyCfg();
+async function persistCfg(){store.set("cfg",CFG);if(DEMO)return "";const {error}=await sb.from("app_settings").upsert({id:1,data:CFG,updated_at:new Date().toISOString()});return error?"Saved on this device only. Clients will not see it until the settings table exists in Supabase.":""}
+
+/* small sections under the title */
+const QUICK=["Client Preferences","Templates","Weekly progress report tracker","Event Planning","Automation"];
+$("#quick").innerHTML=QUICK.map(q=>`<button>${q}</button>`).join("");
+[...$("#quick").children].forEach((b,i)=>b.onclick=()=>openModal(`<h3>${QUICK[i]}</h3><p>This section is clickable now. Its content will be set up in the next build step.</p>`));
+
+/* executive file */
+const BUCKET="executive-files",EXT=["pdf","doc","docx","xls","xlsx","ppt","pptx","txt","csv","png","jpg","jpeg"],MAXMB=25;
+const DEFNAMES=["Inbox Management","Calendar Management","Project Management","Expense Management","Travel Management","Meeting Coordination","Tech Operation","Section 8","Section 9","Section 10"];
+const fname=i=>(CFG.fileNames&&CFG.fileNames[i])||DEFNAMES[i];
+let DOCS_NOW=[];
+function say(m,bad){const e=$("#fmsg");if(e){e.textContent=m;e.style.color=bad?"var(--bad)":""}}
+const mb=n=>n?(n/1048576).toFixed(1)+" MB":"";
+function fileUI(){
+  const c=$("#oCard");
+  if(role!=="owner"){c.innerHTML='<p class="s">The file area is only available to the owner for now.</p>';return}
+  if(DEMO){c.innerHTML='<p class="s">Connect the database to use folders and uploads.</p>';return}
+  c.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3>Sections</h3><button class="chip" id="rn">Rename sections</button></div><p class="s">Choose a section to add folders and documents.</p><div class="tiles" id="tiles"></div><div id="fview"></div><p id="fmsg" role="status" class="s"></p>';
+  $("#tiles").innerHTML=DEFNAMES.map((_,i)=>`<button data-s="${i}">${esc(fname(i))}</button>`).join("");
+  [...$("#tiles").children].forEach((b,i)=>b.onclick=()=>openSection(i));
+  $("#rn").onclick=()=>{openModal(`<h3>Rename sections</h3><form id="rf">${DEFNAMES.map((_,i)=>`<div class="fld"><label for="rn${i}">Section ${i+1}</label><input id="rn${i}" type="text" maxlength="40" required value="${esc(fname(i))}"></div>`).join("")}<p class="err" id="rerr" role="alert"></p><button class="btn" type="submit">Save</button></form>`,true);
+    $("#rf").onsubmit=async e=>{e.preventDefault();CFG.fileNames=DEFNAMES.map((_,k)=>$("#rn"+k).value.trim()||DEFNAMES[k]);const m=await persistCfg();if(m){$("#rerr").textContent=m;return}closeModal();fileUI()}};
+}
+function openSection(i){
+  [...$("#tiles").children].forEach((t,k)=>t.classList.toggle("on",k===i));
+  $("#fview").innerHTML=`<h3 style="margin:16px 0 8px">${esc(fname(i))}</h3><form id="nf" class="addf"><input id="nfn" type="text" maxlength="80" required placeholder="Folder name" aria-label="Folder name"><button class="btn" type="submit">Add folder</button></form><div id="flist"></div>`;
+  $("#nf").onsubmit=async e=>{e.preventDefault();const n=$("#nfn").value.trim();if(!n)return;const {error}=await sb.from("folders").insert({slot:i+1,name:n});if(error)return say("Could not add the folder.",1);$("#nfn").value="";say("");drawFolders(i)};
+  drawFolders(i);
+}
+async function drawFolders(i){
+  const L=$("#flist"),f=await sb.from("folders").select("id,name").eq("slot",i+1).order("created_at");
+  if(f.error){L.innerHTML="";return say("Could not load folders. Run supabase-files.sql in Supabase first.",1)}
+  const ids=f.data.map(x=>x.id),d=ids.length?await sb.from("documents").select("id,folder_id,kind,name,path,url,size").in("folder_id",ids).order("created_at"):{data:[]};
+  DOCS_NOW=d.data||[];
+  L.innerHTML=f.data.length?f.data.map(x=>`<div class="card fol" data-f="${x.id}"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>${esc(x.name)}</b><button class="link" data-act="delf">Delete folder</button></div>
+<ul class="docs">${DOCS_NOW.filter(y=>y.folder_id===x.id).map(y=>`<li><span>${y.kind==="link"?"Drive link: ":""}${esc(y.name)} <small>${mb(y.size)}</small></span><button class="link" data-act="open" data-d="${y.id}">Open</button><button class="link" data-act="deld" data-d="${y.id}">Remove</button></li>`).join("")||'<li><span class="s">No documents yet.</span></li>'}</ul>
+<div class="addf"><label for="up${x.id}">Upload documents</label><input id="up${x.id}" data-act="up" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.png,.jpg,.jpeg"></div>
+<div class="addf"><input type="url" data-k="lu" placeholder="Paste a Google Drive or Google Docs link" aria-label="Google Drive link"><input type="text" data-k="ln" maxlength="80" placeholder="Name (optional)" aria-label="Link name"><button class="btn" data-act="addlink">Add link</button></div></div>`).join(""):'<p class="s">No folders yet. Use Add folder.</p>';
+  L.onclick=async e=>{
+    const b=e.target.closest("[data-act]");if(!b||b.dataset.act==="up")return;
+    const box=b.closest("[data-f]"),fid=box&&box.dataset.f,act=b.dataset.act,doc=DOCS_NOW.find(y=>y.id===b.dataset.d);
+    if(act==="open"){
+      if(doc.kind==="link"){window.open(doc.url,"_blank","noopener");return}
+      const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(doc.path,60);
+      if(error)return say("Could not open that file.",1);window.open(data.signedUrl,"_blank","noopener");return}
+    if(act==="deld"){if(!confirm("Remove this document?"))return;if(doc.path)await sb.storage.from(BUCKET).remove([doc.path]);await sb.from("documents").delete().eq("id",doc.id);return drawFolders(i)}
+    if(act==="delf"){if(!confirm("Delete this folder and every document in it?"))return;const ps=DOCS_NOW.filter(y=>y.folder_id===fid&&y.path).map(y=>y.path);if(ps.length)await sb.storage.from(BUCKET).remove(ps);await sb.from("folders").delete().eq("id",fid);return drawFolders(i)}
+    if(act==="addlink"){
+      const u=box.querySelector("[data-k=lu]").value.trim(),n=box.querySelector("[data-k=ln]").value.trim();let h="";
+      try{const x=new URL(u);h=x.protocol==="https:"?x.hostname:""}catch(_){}
+      if(h!=="drive.google.com"&&h!=="docs.google.com")return say("Only Google Drive or Google Docs links (https) can be added.",1);
+      const {error}=await sb.from("documents").insert({folder_id:fid,kind:"link",name:n||"Google Drive link",url:u});
+      if(error)return say("Could not add the link.",1);say("");return drawFolders(i)}
+  };
+  L.onchange=async e=>{
+    const inp=e.target.closest("[data-act=up]");if(!inp)return;const fid=inp.closest("[data-f]").dataset.f;let ok=0,bad=[];
+    for(const f of inp.files){
+      const ext=f.name.split(".").pop().toLowerCase();
+      if(!EXT.includes(ext)||f.size>MAXMB*1048576){bad.push(f.name);continue}
+      say("Uploading "+f.name+"...");
+      const path=fid+"/"+crypto.randomUUID()+"-"+f.name.replace(/[^\w.\-]+/g,"_");
+      const up=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||undefined,upsert:false});
+      if(up.error){bad.push(f.name);continue}
+      const ins=await sb.from("documents").insert({folder_id:fid,kind:"file",name:f.name,path,size:f.size});
+      if(ins.error){await sb.storage.from(BUCKET).remove([path]);bad.push(f.name);continue}
+      ok++}
+    await drawFolders(i);
+    say(ok+" uploaded."+(bad.length?" Not uploaded (wrong type, over "+MAXMB+" MB, or an error): "+bad.join(", "):""),bad.length>0)};
+}
 
 /* filters */
 $("#range").textContent="Oct 1 – Oct 31, 2026";
@@ -303,7 +380,7 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const DRAFT="<p><b>Draft template.</b> Have it reviewed against the laws that apply to you before real clients use the app.</p>";
 const DOCS={
 privacy:["Privacy Policy",DRAFT+`<h4>Who runs this app</h4><p>${CONFIG.owner}. Contact: ${MAIL}.</p>
-<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
+<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Folders, documents and Google Drive links the owner adds in the Executive File area, kept in private storage that only the owner can open.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
 <h4>Why we use it</h4><p>To create your account, check your invitation, show you your own workspace, and send reminders you ask for. We do not use it for advertising and we do not sell it.</p>
 <h4>Who else handles it</h4><ul><li>Supabase: database and sign-in.</li><li>GitHub Pages: hosts this page.</li><li>jsDelivr: delivers a script library to your browser, so it can see your IP address.</li></ul><p>These providers may keep technical logs, such as IP addresses.</p>
 <h4>How long we keep it</h4><p>While your account exists. Ask us to delete it and we will remove your account and its invitation record.</p>
