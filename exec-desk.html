@@ -137,6 +137,8 @@ body.edt #dash [data-lab]{outline:1px dashed var(--acc);outline-offset:2px;curso
 .modal.form .acts{display:none}
 .bellb[aria-pressed=true]{background:var(--card2)}
 .sys>div{flex:1;min-width:0}.sys>span{flex:none;white-space:nowrap}.sys .own{display:inline-flex;align-items:center}
+.cover>.cpen{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:#ffffff26;color:#fff}.cover>.cpen:hover{background:#ffffff45}
+.kpi .l .ico{display:inline-flex;align-items:center;gap:4px}
 </style>
 </head>
 <body data-theme="navy">
@@ -156,7 +158,6 @@ body.edt #dash [data-lab]{outline:1px dashed var(--acc);outline-offset:2px;curso
       <button class="chip" id="signOut">Sign out</button>
       <button class="bellb" id="bell" aria-label="Notifications"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><b id="bellN">0</b></button>
       <button class="bellb" id="editBtn" hidden aria-label="Edit dashboard" title="Edit dashboard"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
-      <button class="bellb" id="editTextBtn" hidden aria-pressed="false" aria-label="Edit text mode: click any label to change it" title="Edit text: click any label to change it"><svg class="i" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></button>
     </div>
   </div>
 
@@ -169,27 +170,28 @@ body.edt #dash [data-lab]{outline:1px dashed var(--acc);outline-offset:2px;curso
     <div class="hero"><section class="cover" id="cover">
       <svg class="av" viewBox="0 0 100 100"><circle cx="50" cy="26" r="20"/><path d="M8 98c0-22 14-40 42-40s42 18 42 40z"/><path d="M50 58l-7 10 7 22 7-22z" fill="#0a2a5a"/></svg>
       <div><h2 id="cName">Lier Consig</h2><p id="cRole">Chief Executive Officer &amp; Co-Founder</p></div>
+      <button class="cpen own" id="coverPen" aria-label="Edit cover: name, title and photo" title="Edit cover"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
     </section><div class="clock"><small id="cdate"></small><div class="cities" id="cities"></div><div class="hint">Click a city to change it</div></div></div>
 
     <div class="filters">
       <span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M3 5h18v16H3zM3 10h18M8 3v4M16 3v4"/></svg><span id="range" data-lab="range"></span></span>
-      <div class="quick" id="quick"></div>
+      <div class="quick" id="quick"></div><button class="ib own" data-sec="page" aria-label="Edit page text: subtitle, date range, small sections, footer" title="Edit text"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
     </div>
 
     <div class="grid4" id="kpis"></div>
 
     <div class="row2" id="row1">
-      <section class="card"><div class="ch"><div><h3 data-lab="tasksTitle">Executive task tracker</h3><p class="s" data-lab="tasksSub">Tasks, approvals, and follow-ups for the executive team</p></div><button class="chip own" data-add="task">+ Add task</button></div>
+      <section class="card"><div class="ch"><div><h3 data-lab="tasksTitle">Executive task tracker</h3><p class="s" data-lab="tasksSub">Tasks, approvals, and follow-ups for the executive team</p></div><span><button class="ib own" data-sec="tasks" aria-label="Edit task tracker text" title="Edit text"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button> <button class="chip own" data-add="task">+ Add task</button></span></div>
         <div class="scroll"><table><thead><tr><th data-lab="tH1">Task</th><th data-lab="tH2">Due date</th><th data-lab="tH3">Owner</th><th data-lab="tH4">Status</th><th class="own"></th></tr></thead><tbody id="tasks"></tbody></table></div></section>
-      <section class="card"><div class="ch"><h3 data-lab="nextTitle">Next meeting</h3><span class="badge" id="agN">0</span></div><p class="s" id="nextSub" style="margin-bottom:2px"></p><p class="s" id="nextMeta"></p><div id="meets"></div>
+      <section class="card"><div class="ch"><h3 data-lab="nextTitle">Next meeting</h3><span><button class="ib own" data-sec="next" aria-label="Edit next meeting text" title="Edit text"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><span class="badge" id="agN">0</span></span></div><p class="s" id="nextSub" style="margin-bottom:2px"></p><p class="s" id="nextMeta"></p><div id="meets"></div>
         <div class="ch" style="margin-top:6px"><button class="link" id="agenda" data-lab="agendaLink">View meeting agenda →</button><span class="own"><button class="chip" id="editNext">Edit meeting</button> <button class="chip" data-add="agenda">+ Add agenda item</button></span></div></section>
     </div>
 
     <div class="row2" id="row2">
-      <section class="card"><div class="ch"><div><h3 data-lab="logsTitle">Meeting logs</h3><p class="s" data-lab="logsSub">Recent discussions, action items, and follow-up owners</p></div><span><button class="chip own" data-add="log">+ Add meeting</button> <button class="link" id="allLogs" data-lab="allLogs">View all logs ↗</button></span></div>
+      <section class="card"><div class="ch"><div><h3 data-lab="logsTitle">Meeting logs</h3><p class="s" data-lab="logsSub">Recent discussions, action items, and follow-up owners</p></div><span><button class="ib own" data-sec="logs" aria-label="Edit meeting logs text" title="Edit text"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button> <button class="chip own" data-add="log">+ Add meeting</button> <button class="link" id="allLogs" data-lab="allLogs">View all logs ↗</button></span></div>
         <div class="scroll"><table><thead><tr><th data-lab="lH1">Meeting</th><th data-lab="lH2">Date</th><th data-lab="lH3">Owner</th><th data-lab="lH4">Status</th><th data-lab="lH5">Action items</th><th data-lab="lH6">Notes</th><th class="own"></th></tr></thead><tbody id="logs"></tbody></table></div>
         <div class="foot"><span id="logsCnt"></span><span id="logsUrg" style="color:var(--warn)"></span></div></section>
-      <section class="card"><div class="ch"><div><h3 data-lab="resTitle">Internal Resources</h3><p class="s" data-lab="resSub">Sample list for the demo.</p></div><button class="chip own" data-add="res">+ Add resource</button></div>
+      <section class="card"><div class="ch"><div><h3 data-lab="resTitle">Internal Resources</h3><p class="s" data-lab="resSub">Sample list for the demo.</p></div><span><button class="ib own" data-sec="res" aria-label="Edit internal resources text" title="Edit text"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button> <button class="chip own" data-add="res">+ Add resource</button></span></div>
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mut)"><span id="rH"></span><span id="rD" style="color:var(--warn)"></span></div>
         <div class="hb" id="hb"></div><div id="sys"></div>
         <p class="s" id="rNote" style="margin:12px 0 0;color:var(--warn)"></p></section>
@@ -229,8 +231,8 @@ function defaults(){return{
   agenda:[["Review Q4 executive summary","Boardroom","Jordan Lee","11:30"],["Confirm world clock handoff","London, Tokyo, New York · 3 regions","Sarah Patel","09:45"],["Prepare leadership talking points","Key themes: revenue, margin, delivery","Alex Rivera","10:08"]].map(a=>({id:uid(),title:a[0],desc:a[1],owner:a[2],time:a[3]})),
   logs:[["Leadership offsite","Jordan Lee","2026-10-31","Approved",3,"Approved"],["Ops review","Sarah Patel","2026-10-30","Pending",2,"Pending"],["Customer call","Michael Chen","2026-10-29","Urgent",1,"Urgent"],["Board prep","Emma Wilson","2026-10-28","Approved",1,"Approved"]].map(l=>({id:uid(),name:l[0],owner:l[1],date:l[2],status:l[3],items:l[4],notes:l[5]})),
   resources:[["Salesforce","CRM","healthy",""],["NetSuite","Finance","healthy",""],["SAP S/4HANA","Supply chain","delayed","18m lag"],["Workday","People","healthy",""],["Zendesk","Support","healthy",""],["Snowflake","Data","healthy",""]].map(r=>({id:uid(),name:r[0],desc:r[1],status:r[2],note:r[3]})),
-  updated:null}}
-const mergeData=(saved)=>{const d=defaults();return {...d,...saved,labels:{...d.labels,...(saved&&saved.labels||{})}}};
+  ov:{},updated:null}}
+const mergeData=(saved)=>{const d=defaults();return {...d,...saved,labels:{...d.labels,...(saved&&saved.labels||{})},ov:{...(saved&&saved.ov||{})}}};
 const emptyData=()=>({...defaults(),tasks:[],agenda:[],logs:[],resources:[],next:{title:"",date:"",time:"",location:"",participants:"",owner:""}});
 let DATA=mergeData(store.get("data",null));
 let q="";
@@ -422,6 +424,7 @@ function noteModal(i,fid,doc){
 const fmtD=(iso,short)=>{if(!iso)return "";const d=new Date(iso+"T00:00:00");return isNaN(d)?iso:new Intl.DateTimeFormat("en-US",short?{month:"short",day:"numeric"}:{month:"short",day:"2-digit",year:"numeric"}).format(d)};
 const fmtT=t=>{if(!t)return "";const [h,m]=t.split(":").map(Number);return ((h%12)||12)+":"+String(m).padStart(2,"0")+(h>=12?" PM":" AM")};
 const ini=n=>String(n||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase()||"?";
+let KAUTO={};
 const cnt=s=>DATA.tasks.filter(t=>t.status===s).length;
 const spark=(n,c)=>{const p=n<2?[0,n,n]:Array.from({length:n},(_,i)=>i+1),mx=Math.max(...p),mn=Math.min(...p);const pts=p.map((v,i)=>`${i*(84/(p.length-1))},${30-(v-mn)/(mx-mn||1)*26}`).join(" ");return `<svg width="84" height="34" viewBox="0 0 84 34"><polyline points="${pts}" fill="none" stroke="var(--${c})" stroke-width="2" stroke-linejoin="round"/></svg>`};
 const IC={pen:"M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z",del:"M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"};
@@ -435,7 +438,9 @@ function kpis(){
     ["k2","M3 20h18M7 16V9M12 16V5M17 16v-4",(u+p)+(u+p===1?" item":" items"),u+" urgent",u?"bad":"good",L.pendFoot,u+p,"good","pendFoot"],
     ["k3","M1 6h13v10H1zM14 10h4l3 3v3h-7z",u+(u===1?" task":" tasks"),top&&top.due?"Due "+fmtD(top.due,1):"None due","warn",top?top.title:"Nothing urgent",u,"bad",""],
     ["k4","M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01",DATA.logs.length+(DATA.logs.length===1?" log":" logs"),acts+" action items","good","Last updated: "+upd,DATA.logs.length,"good",""]];
-  $("#kpis").innerHTML=K.map(k=>`<div class="card kpi"><div class="l"><span data-lab="${k[0]}">${esc(L[k[0]])}</span>${ic(k[1])}</div><div class="n">${esc(k[2])}</div><div class="m"><span class="pill" style="--c:var(--${k[4]})">${esc(k[3])}</span>${spark(k[6],k[7])}</div><div class="f"${k[8]?` data-lab="${k[8]}"`:""}>${esc(k[5])}</div></div>`).join("");
+  KAUTO={};
+  $("#kpis").innerHTML=K.map(k=>{const O=(DATA.ov||{})[k[0]]||{},val=O.v||k[2],chip=O.c||k[3],foot=O.f||k[5];KAUTO[k[0]]={v:k[2],c:k[3],f:k[5]};
+    return `<div class="card kpi"><div class="l"><span>${esc(L[k[0]])}</span><span class="ico">${ic(k[1])}<button class="ib own" data-kp="${k[0]}" aria-label="Edit ${esc(L[k[0]])} card text" title="Edit this card">${ic(IC.pen)}</button></span></div><div class="n">${esc(val)}</div><div class="m"><span class="pill" style="--c:var(--${k[4]})">${esc(chip)}</span>${spark(k[6],k[7])}</div><div class="f">${esc(foot)}</div></div>`}).join("");
   const n=u+p;$("#bellN").textContent=n;$("#bellN").hidden=!n}
 function tasks(){
   $("#tasks").innerHTML=DATA.tasks.map(t=>`<tr><td>${esc(t.title)}${t.desc?`<small class="sub">${esc(t.desc)}</small>`:""}</td><td style="color:var(--mut)">${fmtD(t.due)}</td><td>${esc(t.owner)}</td><td><select class="st" data-id="${t.id}" style="--c:var(--${TONE[t.status]||"info"})" aria-label="Status of ${esc(t.title)}">${Object.keys(TONE).map(s=>`<option${s===t.status?" selected":""}>${s}</option>`).join("")}</select></td><td class="act own">${btns("task",t.id,t.title)}</td></tr>`).join("")||`<tr><td colspan="5" style="color:var(--mut)">No tasks yet.${role==="owner"?" Use Add task.":""}</td></tr>`}
@@ -480,7 +485,7 @@ async function loadData(){
 async function commit(){renderAll();await persist()}
 
 /* ===== dashboard data: add, edit, delete ===== */
-const fld=(f,v)=>{const id="gf_"+f.k,a=`id="${id}" name="${f.k}"${f.req?" required":""}${f.max?` maxlength="${f.max}"`:""}`,val=v===undefined||v===null?"":v;
+const fld=(f,v)=>{const id="gf_"+f.k,a=`id="${id}" name="${f.k}"${f.req?" required":""}${f.max?` maxlength="${f.max}"`:""}${f.ph?` placeholder="${esc(f.ph)}"`:""}`,val=v===undefined||v===null?"":v;
   let c;
   if(f.type==="textarea")c=`<textarea ${a} rows="3">${esc(val)}</textarea>`;
   else if(f.type==="select")c=`<select ${a}>${f.opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(val)?" selected":""}>${esc(o[1])}</option>`).join("")}</select>`;
@@ -515,23 +520,26 @@ function editNext(){
     onSave:v=>{Object.assign(DATA.next,v);commit()}});
 }
 $("#dash").addEventListener("click",e=>{
-  const b=e.target.closest("[data-e],[data-x],[data-add]");if(!b||role!=="owner")return;
+  const b=e.target.closest("[data-e],[data-x],[data-add],[data-kp],[data-sec]");if(!b||role!=="owner")return;
+  if(b.dataset.kp)return kpiModal(b.dataset.kp);
+  if(b.dataset.sec)return secText(b.dataset.sec);
   if(b.dataset.add)return editRec(b.dataset.add,null);
   if(b.dataset.e)return editRec(b.dataset.e,b.dataset.id);
   if(b.dataset.x)return delRec(b.dataset.x,b.dataset.id);
 });
+const TXTN={subtitle:"Page subtitle",range:"Date range",sampleTag:"Top bar note",footL:"Footer text",tasksTitle:"Section title",tasksSub:"Section description",nextTitle:"Section title",agendaLink:"Agenda link text",logsTitle:"Section title",logsSub:"Section description",allLogs:"View-all link text",resTitle:"Section title",resSub:"Section description"};
+const SECS={page:["Edit page text",["subtitle","range","q1","q2","q3","q4","q5","sampleTag","footL"]],tasks:["Edit task tracker text",["tasksTitle","tasksSub","tH1","tH2","tH3","tH4"]],next:["Edit next meeting text",["nextTitle","agendaLink"]],logs:["Edit meeting logs text",["logsTitle","logsSub","allLogs","lH1","lH2","lH3","lH4","lH5","lH6"]],res:["Edit internal resources text",["resTitle","resSub"]]};
+const txtName=k=>TXTN[k]||(/^q(\d)$/.test(k)?"Small section "+k.slice(1):/^[tl]H(\d)$/.test(k)?"Column "+k.slice(2)+" heading":k);
+function secText(sec){const [t,keys]=SECS[sec];
+  formModal({title:t,vals:DATA.labels,fields:keys.map(k=>({k,label:txtName(k),type:/^subtitle$|Sub$/.test(k)?"textarea":"text",max:200})),onSave:v=>{keys.forEach(k=>DATA.labels[k]=v[k]);commit()}})}
+function kpiModal(k){const L=DATA.labels,O=(DATA.ov||{})[k]||{},A=KAUTO[k]||{};
+  formModal({title:"Edit card text",vals:{label:L[k],v:O.v||"",c:O.c||"",f:O.f||""},fields:[{k:"label",label:"Card title",req:1,max:60},{k:"v",label:"Main text (leave empty to keep it automatic)",ph:A.v,max:40},{k:"c",label:"Badge text (leave empty to keep it automatic)",ph:A.c,max:40},{k:"f",label:"Bottom line (leave empty to keep it automatic)",ph:A.f,max:120}],
+    onSave:v=>{L[k]=v.label;DATA.ov=DATA.ov||{};DATA.ov[k]={v:v.v,c:v.c,f:v.f};commit()}})}
+$("#coverPen").onclick=()=>editPanel();
 $("#editNext").onclick=editNext;
 $("#tasks").onchange=e=>{const s=e.target.closest("select.st");if(!s)return;const t=DATA.tasks.find(x=>x.id===s.dataset.id);if(t){t.status=s.value;commit()}};
-/* click any label to change it (owner, Edit text mode) */
-let editText=false;
-$("#editTextBtn").onclick=()=>{editText=!editText;document.body.classList.toggle("edt",editText);$("#editTextBtn").setAttribute("aria-pressed",String(editText))};
-$("#dash").addEventListener("click",e=>{
-  if(!editText||role!=="owner")return;const el=e.target.closest("[data-lab]");if(!el)return;
-  e.preventDefault();e.stopPropagation();const k=el.dataset.lab;
-  formModal({title:"Edit text",vals:{v:DATA.labels[k]},fields:[{k:"v",label:"Text",type:/subtitle|Sub$/.test(k)?"textarea":"text",max:200}],onSave:o=>{DATA.labels[k]=o.v;commit()}});
-},true);
-$("#agenda").onclick=()=>{if(editText)return;openModal(`<h3>Meeting agenda</h3><p style="color:var(--text)">${esc(DATA.next.title||"No meeting set")}</p>`+(DATA.agenda.length?DATA.agenda.map(m=>`<p style="color:var(--text);margin-bottom:8px"><b>${fmtT(m.time)}</b> ${esc(m.title)}<br><small style="color:var(--mut)">${esc(m.desc)} · ${esc(m.owner)}</small></p>`).join(""):"<p>No agenda items yet.</p>"))};
-$("#allLogs").onclick=()=>{if(editText)return;openModal("<h3>All meeting logs</h3>"+(DATA.logs.length?DATA.logs.map(l=>`<p style="color:var(--text);margin-bottom:8px"><b>${esc(l.name)}</b> · ${fmtD(l.date,1)}<br><small style="color:var(--mut)">${esc(l.owner)} · ${esc(l.status)} · ${(+l.items||0)} action items</small></p>`).join(""):"<p>No meeting logs yet.</p>"))};
+$("#agenda").onclick=()=>{openModal(`<h3>Meeting agenda</h3><p style="color:var(--text)">${esc(DATA.next.title||"No meeting set")}</p>`+(DATA.agenda.length?DATA.agenda.map(m=>`<p style="color:var(--text);margin-bottom:8px"><b>${fmtT(m.time)}</b> ${esc(m.title)}<br><small style="color:var(--mut)">${esc(m.desc)} · ${esc(m.owner)}</small></p>`).join(""):"<p>No agenda items yet.</p>"))};
+$("#allLogs").onclick=()=>{openModal("<h3>All meeting logs</h3>"+(DATA.logs.length?DATA.logs.map(l=>`<p style="color:var(--text);margin-bottom:8px"><b>${esc(l.name)}</b> · ${fmtD(l.date,1)}<br><small style="color:var(--mut)">${esc(l.owner)} · ${esc(l.status)} · ${(+l.items||0)} action items</small></p>`).join(""):"<p>No meeting logs yet.</p>"))};
 $("#bell").onclick=()=>{const a=DATA.tasks.filter(t=>t.status==="Urgent"||t.status==="Pending approval");openModal("<h3>Needs your attention</h3>"+(a.length?a.map(t=>`<p style="color:var(--text);margin-bottom:8px"><span class="pill" style="--c:var(--${TONE[t.status]})">${esc(t.status)}</span> ${esc(t.title)}<br><small style="color:var(--mut)">${esc(t.owner)} · due ${fmtD(t.due)}</small></p>`).join(""):"<p>Nothing needs attention right now.</p>"))};
 
 /* ===== access, consent and legal ===== */
@@ -616,7 +624,7 @@ async function route(){
   role=data&&data.role;
   if(role==="client"||role==="owner")unlock();else gate("code");
 }
-function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#editBtn").hidden=role!=="owner";$("#editTextBtn").hidden=role!=="owner";document.body.toggleAttribute("data-owner",role==="owner");loadCfg();loadData();$("#main").focus()}
+function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#editBtn").hidden=role!=="owner";document.body.toggleAttribute("data-owner",role==="owner");loadCfg();loadData();$("#main").focus()}
 async function signOut(){if(sb)await sb.auth.signOut();role=null;$("#app").hidden=true;gate(DEMO?"signup":"login")}
 $("#signOut").onclick=signOut;
 async function start(){
