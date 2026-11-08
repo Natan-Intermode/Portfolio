@@ -116,6 +116,16 @@ select.st option{color:#000;background:#fff}
 .fol{margin-top:12px}.docs{list-style:none;padding:0;margin:8px 0}.docs li{display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid var(--line);flex-wrap:wrap}.docs li span{flex:1;min-width:140px}.docs small{color:var(--mut)}
 .addf{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}.addf input[type=text],.addf input[type=url]{flex:1;min-width:160px;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}.addf .btn{padding:9px 16px}
 @media(max-width:1000px){.hero{flex-direction:column}.cover{flex:none;width:100%}.clock{width:100%}}
+.fbar{display:flex;justify-content:flex-end;margin-bottom:6px}
+.fsec{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:14px 0 6px}.fsec h3{margin:0}.fsec .btn{padding:8px 16px}
+.fh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.fh .rt{margin-left:auto}.fb{margin-top:6px}
+.car{width:28px;height:28px;display:grid;place-items:center;border-radius:6px}.car:hover{background:var(--card2)}.car svg{transition:transform .15s}.car[aria-expanded=true] svg{transform:rotate(90deg)}
+.cnt{color:var(--mut)}
+.plus{position:relative}.pbtn{width:26px;height:26px;border-radius:6px;border:1px solid var(--line);font-size:18px;line-height:1;display:grid;place-items:center}.pbtn:hover{border-color:var(--acc);color:var(--acc)}
+.menu{position:absolute;left:0;top:100%;margin-top:4px;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:240px;box-shadow:0 8px 24px #0005}
+.menu button{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:6px}.menu button:hover,.menu button:focus-visible{background:var(--card2)}
+.tag{display:inline-block;font-style:normal;font-size:10px;font-weight:700;background:var(--card2);border-radius:4px;padding:1px 6px;margin-right:8px;color:var(--mut)}
+.fld textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;resize:vertical}
 </style>
 </head>
 <body data-theme="navy">
@@ -216,7 +226,7 @@ const nav=$("#nav");
 NAV.slice(0,8).forEach((n,i)=>{const b=document.createElement("button");b.innerHTML=ic(n[1])+n[0];b.onclick=()=>show(i);nav.appendChild(b)});
 $("#subBtn").onclick=()=>show(8);
 const OCARD=$("#oCard").innerHTML;
-function show(i){[...nav.children].forEach((b,j)=>b.classList.toggle("on",j===i));const d=i===0;$("#dash").hidden=!d;$("#other").hidden=d;if(!d){$("#oT").textContent=i===7?"Executive File":NAV[i][0];$("#oD").textContent=NAV[i][2];if(i===3)inviteUI();else if(i===7)fileUI();else $("#oCard").innerHTML=OCARD}window.scrollTo(0,0)}
+function show(i){[...nav.children].forEach((b,j)=>b.classList.toggle("on",j===i));const d=i===0;$("#dash").hidden=!d;$("#other").hidden=d;if(!d){$("#oT").textContent=i===7?"Executive File":NAV[i][0];$("#oD").textContent=NAV[i][2];$("#oD").hidden=i===7;$("#oCard").style.marginTop=i===7?"8px":"18px";if(i===3)inviteUI();else if(i===7)fileUI();else $("#oCard").innerHTML=OCARD}window.scrollTo(0,0)}
 show(0);
 
 /* world clock */
@@ -283,17 +293,23 @@ $("#quick").innerHTML=QUICK.map(q=>`<button>${q}</button>`).join("");
 [...$("#quick").children].forEach((b,i)=>b.onclick=()=>openModal(`<h3>${QUICK[i]}</h3><p>This section is clickable now. Its content will be set up in the next build step.</p>`));
 
 /* executive file */
-const BUCKET="executive-files",EXT=["pdf","doc","docx","xls","xlsx","ppt","pptx","txt","csv","png","jpg","jpeg"],MAXMB=25;
+const BUCKET="executive-files",MAXMB=25;
+const TYPES={pdf:".pdf",word:".doc,.docx",other:".xls,.xlsx,.ppt,.pptx,.txt,.csv,.png,.jpg,.jpeg"};
+const MENU=[["pdf","PDF"],["word","Word"],["drive","Google Drive"],["docs","Google Docs"],["note","Write a note"],["other","Other file (Excel, PowerPoint, text, image)"]];
 const DEFNAMES=["Inbox Management","Calendar Management","Project Management","Expense Management","Travel Management","Meeting Coordination","Tech Operation","Section 8","Section 9","Section 10"];
 const fname=i=>(CFG.fileNames&&CFG.fileNames[i])||DEFNAMES[i];
-let DOCS_NOW=[];
+let DOCS_NOW=[],FOLD=store.get("fold",{});
 function say(m,bad){const e=$("#fmsg");if(e){e.textContent=m;e.style.color=bad?"var(--bad)":""}}
 const mb=n=>n?(n/1048576).toFixed(1)+" MB":"";
+const TAG=y=>y.kind==="link"?(/docs\.google/.test(y.url)?"Docs":"Drive"):y.kind==="note"?"Note":(y.name.split(".").pop()||"").toUpperCase();
+function closeMenus(){document.querySelectorAll(".menu").forEach(m=>m.hidden=true);document.querySelectorAll(".pbtn").forEach(p=>p.setAttribute("aria-expanded","false"))}
+document.addEventListener("click",e=>{if(!e.target.closest(".plus"))closeMenus()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenus()});
 function fileUI(){
   const c=$("#oCard");
   if(role!=="owner"){c.innerHTML='<p class="s">The file area is only available to the owner for now.</p>';return}
   if(DEMO){c.innerHTML='<p class="s">Connect the database to use folders and uploads.</p>';return}
-  c.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3>Sections</h3><button class="chip" id="rn">Rename sections</button></div><p class="s">Choose a section to add folders and documents.</p><div class="tiles" id="tiles"></div><div id="fview"></div><p id="fmsg" role="status" class="s"></p>';
+  c.innerHTML='<div class="fbar"><button class="link" id="rn">Rename sections</button></div><div class="tiles" id="tiles"></div><div id="fview"></div><p id="fmsg" role="status" class="s"></p>';
   $("#tiles").innerHTML=DEFNAMES.map((_,i)=>`<button data-s="${i}">${esc(fname(i))}</button>`).join("");
   [...$("#tiles").children].forEach((b,i)=>b.onclick=()=>openSection(i));
   $("#rn").onclick=()=>{openModal(`<h3>Rename sections</h3><form id="rf">${DEFNAMES.map((_,i)=>`<div class="fld"><label for="rn${i}">Section ${i+1}</label><input id="rn${i}" type="text" maxlength="40" required value="${esc(fname(i))}"></div>`).join("")}<p class="err" id="rerr" role="alert"></p><button class="btn" type="submit">Save</button></form>`,true);
@@ -301,49 +317,78 @@ function fileUI(){
 }
 function openSection(i){
   [...$("#tiles").children].forEach((t,k)=>t.classList.toggle("on",k===i));
-  $("#fview").innerHTML=`<h3 style="margin:16px 0 8px">${esc(fname(i))}</h3><form id="nf" class="addf"><input id="nfn" type="text" maxlength="80" required placeholder="Folder name" aria-label="Folder name"><button class="btn" type="submit">Add folder</button></form><div id="flist"></div>`;
-  $("#nf").onsubmit=async e=>{e.preventDefault();const n=$("#nfn").value.trim();if(!n)return;const {error}=await sb.from("folders").insert({slot:i+1,name:n});if(error)return say("Could not add the folder.",1);$("#nfn").value="";say("");drawFolders(i)};
+  $("#fview").innerHTML=`<div class="fsec"><h3>${esc(fname(i))}</h3><button class="btn" id="addf">Add folder</button></div><div id="flist"></div>`;
+  $("#addf").onclick=()=>{openModal(`<h3>New folder</h3><form id="nf"><div class="fld"><label for="nfn">Folder name</label><input id="nfn" type="text" maxlength="80" required></div><p class="err" id="nferr" role="alert"></p><button class="btn" type="submit">Create folder</button></form>`);$("#nfn").focus();
+    $("#nf").onsubmit=async e=>{e.preventDefault();const n=$("#nfn").value.trim();if(!n)return;const {error}=await sb.from("folders").insert({slot:i+1,name:n});if(error){$("#nferr").textContent="Could not save the folder. Please try again.";return}closeModal();await drawFolders(i);say("Folder saved.")}};
   drawFolders(i);
 }
 async function drawFolders(i){
   const L=$("#flist"),f=await sb.from("folders").select("id,name").eq("slot",i+1).order("created_at");
   if(f.error){L.innerHTML="";return say("Could not load folders. Run supabase-files.sql in Supabase first.",1)}
-  const ids=f.data.map(x=>x.id),d=ids.length?await sb.from("documents").select("id,folder_id,kind,name,path,url,size").in("folder_id",ids).order("created_at"):{data:[]};
+  const ids=f.data.map(x=>x.id),d=ids.length?await sb.from("documents").select("id,folder_id,kind,name,path,url,size,body").in("folder_id",ids).order("created_at"):{data:[]};
   DOCS_NOW=d.data||[];
-  L.innerHTML=f.data.length?f.data.map(x=>`<div class="card fol" data-f="${x.id}"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>${esc(x.name)}</b><button class="link" data-act="delf">Delete folder</button></div>
-<ul class="docs">${DOCS_NOW.filter(y=>y.folder_id===x.id).map(y=>`<li><span>${y.kind==="link"?"Drive link: ":""}${esc(y.name)} <small>${mb(y.size)}</small></span><button class="link" data-act="open" data-d="${y.id}">Open</button><button class="link" data-act="deld" data-d="${y.id}">Remove</button></li>`).join("")||'<li><span class="s">No documents yet.</span></li>'}</ul>
-<div class="addf"><label for="up${x.id}">Upload documents</label><input id="up${x.id}" data-act="up" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.png,.jpg,.jpeg"></div>
-<div class="addf"><input type="url" data-k="lu" placeholder="Paste a Google Drive or Google Docs link" aria-label="Google Drive link"><input type="text" data-k="ln" maxlength="80" placeholder="Name (optional)" aria-label="Link name"><button class="btn" data-act="addlink">Add link</button></div></div>`).join(""):'<p class="s">No folders yet. Use Add folder.</p>';
+  const menu=MENU.map(m=>`<button role="menuitem" data-act="add" data-t="${m[0]}">${m[1]}</button>`).join("");
+  L.innerHTML=f.data.length?f.data.map(x=>{const ds=DOCS_NOW.filter(y=>y.folder_id===x.id),open=!FOLD[x.id];
+    return `<div class="card fol" data-f="${x.id}"><div class="fh"><button class="car" data-act="tog" aria-expanded="${open}" aria-label="Show or hide ${esc(x.name)}"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><b>${esc(x.name)}</b><small class="cnt">${ds.length}</small><div class="plus"><button class="pbtn" data-act="plus" aria-haspopup="menu" aria-expanded="false" aria-label="Add to ${esc(x.name)}">+</button><div class="menu" role="menu" hidden>${menu}</div></div><button class="link rt" data-act="delf">Delete folder</button></div><div class="fb"${open?"":" hidden"}><ul class="docs">${ds.map(y=>`<li><span><i class="tag">${esc(TAG(y))}</i>${esc(y.name)} <small>${mb(y.size)}</small></span><button class="link" data-act="open" data-d="${y.id}">${y.kind==="note"?"Open / edit":"Open"}</button>${y.kind==="file"?`<button class="link" data-act="dl" data-d="${y.id}">Download</button>`:""}<button class="link" data-act="deld" data-d="${y.id}">Remove</button></li>`).join("")||'<li><span class="s">Nothing here yet. Use the + button.</span></li>'}</ul></div></div>`}).join(""):'<p class="s">No folders yet. Use Add folder.</p>';
   L.onclick=async e=>{
-    const b=e.target.closest("[data-act]");if(!b||b.dataset.act==="up")return;
-    const box=b.closest("[data-f]"),fid=box&&box.dataset.f,act=b.dataset.act,doc=DOCS_NOW.find(y=>y.id===b.dataset.d);
+    const b=e.target.closest("[data-act]");if(!b)return;
+    const box=b.closest("[data-f]"),fid=box.dataset.f,act=b.dataset.act,doc=DOCS_NOW.find(y=>y.id===b.dataset.d);
+    if(act==="tog"){const fb=box.querySelector(".fb"),h=!fb.hidden;fb.hidden=h;b.setAttribute("aria-expanded",String(!h));if(h)FOLD[fid]=1;else delete FOLD[fid];store.set("fold",FOLD);return}
+    if(act==="plus"){const m=box.querySelector(".menu"),o=m.hidden;closeMenus();m.hidden=!o;b.setAttribute("aria-expanded",String(o));if(o)m.querySelector("button").focus();return}
+    if(act==="add"){closeMenus();return addItem(i,fid,b.dataset.t)}
     if(act==="open"){
+      if(doc.kind==="note")return noteModal(i,fid,doc);
       if(doc.kind==="link"){window.open(doc.url,"_blank","noopener");return}
       const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(doc.path,60);
       if(error)return say("Could not open that file.",1);window.open(data.signedUrl,"_blank","noopener");return}
-    if(act==="deld"){if(!confirm("Remove this document?"))return;if(doc.path)await sb.storage.from(BUCKET).remove([doc.path]);await sb.from("documents").delete().eq("id",doc.id);return drawFolders(i)}
-    if(act==="delf"){if(!confirm("Delete this folder and every document in it?"))return;const ps=DOCS_NOW.filter(y=>y.folder_id===fid&&y.path).map(y=>y.path);if(ps.length)await sb.storage.from(BUCKET).remove(ps);await sb.from("folders").delete().eq("id",fid);return drawFolders(i)}
-    if(act==="addlink"){
-      const u=box.querySelector("[data-k=lu]").value.trim(),n=box.querySelector("[data-k=ln]").value.trim();let h="";
-      try{const x=new URL(u);h=x.protocol==="https:"?x.hostname:""}catch(_){}
-      if(h!=="drive.google.com"&&h!=="docs.google.com")return say("Only Google Drive or Google Docs links (https) can be added.",1);
-      const {error}=await sb.from("documents").insert({folder_id:fid,kind:"link",name:n||"Google Drive link",url:u});
-      if(error)return say("Could not add the link.",1);say("");return drawFolders(i)}
+    if(act==="dl"){const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(doc.path,60,{download:doc.name});
+      if(error)return say("Could not download that file.",1);window.open(data.signedUrl,"_blank","noopener");return}
+    if(act==="deld"){if(!confirm("Remove this item?"))return;if(doc.path)await sb.storage.from(BUCKET).remove([doc.path]);await sb.from("documents").delete().eq("id",doc.id);await drawFolders(i);return say("Removed.")}
+    if(act==="delf"){if(!confirm("Delete this folder and everything in it?"))return;const ps=DOCS_NOW.filter(y=>y.folder_id===fid&&y.path).map(y=>y.path);if(ps.length)await sb.storage.from(BUCKET).remove(ps);await sb.from("folders").delete().eq("id",fid);await drawFolders(i);return say("Folder deleted.")}
   };
-  L.onchange=async e=>{
-    const inp=e.target.closest("[data-act=up]");if(!inp)return;const fid=inp.closest("[data-f]").dataset.f;let ok=0,bad=[];
-    for(const f of inp.files){
-      const ext=f.name.split(".").pop().toLowerCase();
-      if(!EXT.includes(ext)||f.size>MAXMB*1048576){bad.push(f.name);continue}
-      say("Uploading "+f.name+"...");
-      const path=fid+"/"+crypto.randomUUID()+"-"+f.name.replace(/[^\w.\-]+/g,"_");
-      const up=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||undefined,upsert:false});
-      if(up.error){bad.push(f.name);continue}
-      const ins=await sb.from("documents").insert({folder_id:fid,kind:"file",name:f.name,path,size:f.size});
-      if(ins.error){await sb.storage.from(BUCKET).remove([path]);bad.push(f.name);continue}
-      ok++}
-    await drawFolders(i);
-    say(ok+" uploaded."+(bad.length?" Not uploaded (wrong type, over "+MAXMB+" MB, or an error): "+bad.join(", "):""),bad.length>0)};
+}
+function addItem(i,fid,t){
+  if(t==="drive"||t==="docs")return linkModal(i,fid,t);
+  if(t==="note")return noteModal(i,fid,null);
+  document.querySelectorAll("input[data-tmp]").forEach(x=>x.remove());
+  const acc=TYPES[t],inp=document.createElement("input");inp.type="file";inp.multiple=true;inp.accept=acc;inp.dataset.tmp=1;inp.style.display="none";document.body.appendChild(inp);
+  inp.onchange=()=>{const fs=[...inp.files];inp.remove();uploadFiles(i,fid,fs,acc.split(",").map(x=>x.slice(1)))};
+  inp.click();
+}
+async function uploadFiles(i,fid,files,okExt){
+  let ok=0,bad=[];
+  for(const f of files){
+    const ext=f.name.split(".").pop().toLowerCase();
+    if(!okExt.includes(ext)||f.size>MAXMB*1048576){bad.push(f.name);continue}
+    say("Saving "+f.name+"...");
+    const path=fid+"/"+crypto.randomUUID()+"-"+f.name.replace(/[^\w.\-]+/g,"_");
+    const up=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type||undefined,upsert:false});
+    if(up.error){bad.push(f.name);continue}
+    const ins=await sb.from("documents").insert({folder_id:fid,kind:"file",name:f.name,path,size:f.size});
+    if(ins.error){await sb.storage.from(BUCKET).remove([path]);bad.push(f.name);continue}
+    ok++}
+  await drawFolders(i);
+  say((ok?ok+" file"+(ok>1?"s":"")+" saved. ":"")+(bad.length?"Not saved (wrong type, over "+MAXMB+" MB, or an error): "+bad.join(", "):""),bad.length>0);
+}
+function linkModal(i,fid,t){
+  const drive=t==="drive",host=drive?"drive.google.com":"docs.google.com",nm=drive?"Google Drive link":"Google Docs link";
+  openModal(`<h3>Add ${drive?"Google Drive":"Google Docs"} link</h3><form id="lf"><div class="fld"><label for="lfu">Link</label><input id="lfu" type="url" required placeholder="https://${host}/..."></div><p class="err" id="lferr" role="alert"></p><button class="btn" type="submit">Save link</button></form>`);
+  $("#lfu").focus();
+  $("#lf").onsubmit=async e=>{e.preventDefault();const u=$("#lfu").value.trim();let h="";
+    try{const x=new URL(u);h=x.protocol==="https:"?x.hostname:""}catch(_){}
+    if(h!==host){$("#lferr").textContent="Please paste a link that starts with https://"+host+"/";return}
+    const {error}=await sb.from("documents").insert({folder_id:fid,kind:"link",name:nm,url:u});
+    if(error){$("#lferr").textContent="Could not save the link. Please try again.";return}
+    closeModal();await drawFolders(i);say("Link saved.")};
+}
+function noteModal(i,fid,doc){
+  openModal(`<h3>${doc?"Edit note":"New note"}</h3><form id="ntf"><div class="fld"><label for="ntt">Title</label><input id="ntt" type="text" maxlength="200" required></div><div class="fld"><label for="ntb">Writing</label><textarea id="ntb" rows="10" maxlength="20000"></textarea></div><p class="err" id="nterr" role="alert"></p><button class="btn" type="submit">Save</button></form>`,true);
+  if(doc){$("#ntt").value=doc.name;$("#ntb").value=doc.body||""}
+  $("#ntt").focus();
+  $("#ntf").onsubmit=async e=>{e.preventDefault();const row={name:$("#ntt").value.trim(),body:$("#ntb").value};if(!row.name)return;
+    const r=doc?await sb.from("documents").update(row).eq("id",doc.id):await sb.from("documents").insert({...row,folder_id:fid,kind:"note"});
+    if(r.error){$("#nterr").textContent="Could not save the note. Run supabase-files-update.sql in Supabase, then try again.";return}
+    closeModal();await drawFolders(i);say("Note saved.")};
 }
 
 /* filters */
@@ -380,7 +425,7 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const DRAFT="<p><b>Draft template.</b> Have it reviewed against the laws that apply to you before real clients use the app.</p>";
 const DOCS={
 privacy:["Privacy Policy",DRAFT+`<h4>Who runs this app</h4><p>${CONFIG.owner}. Contact: ${MAIL}.</p>
-<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Folders, documents and Google Drive links the owner adds in the Executive File area, kept in private storage that only the owner can open.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
+<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Folders, documents, written notes and Google Drive or Google Docs links the owner adds in the Executive File area, kept in private storage that only the owner can open.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
 <h4>Why we use it</h4><p>To create your account, check your invitation, show you your own workspace, and send reminders you ask for. We do not use it for advertising and we do not sell it.</p>
 <h4>Who else handles it</h4><ul><li>Supabase: database and sign-in.</li><li>GitHub Pages: hosts this page.</li><li>jsDelivr: delivers a script library to your browser, so it can see your IP address.</li></ul><p>These providers may keep technical logs, such as IP addresses.</p>
 <h4>How long we keep it</h4><p>While your account exists. Ask us to delete it and we will remove your account and its invitation record.</p>
@@ -397,7 +442,7 @@ terms:["Terms and Conditions",DRAFT+`<h4>Using the app</h4><p>Access is by invit
 <h4>Cost</h4><p>The app itself does not charge you. If that changes, we will tell you first.</p>
 <h4>Contact and governing law</h4><p>Questions: ${MAIL}. Governing law: [add the country whose law applies].</p>`],
 cookies:["Cookie Policy",DRAFT+`<h4>What this app stores in your browser</h4><p>This app uses browser storage. It does not use advertising or tracking cookies. Everything below is needed for the app to work or to remember your choices.</p>
-<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cfg</b>: your color theme, your world clock cities and, on the owner's device, a copy of the dashboard settings.</li><li><b>ed.tasks</b>: sample task statuses in the demo.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
+<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cfg</b>: your color theme, your world clock cities and, on the owner's device, a copy of the dashboard settings.</li><li><b>ed.fold</b>: which folders you have collapsed.</li><li><b>ed.tasks</b>: sample task statuses in the demo.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
 <h4>What we do not use</h4><p>No analytics, no advertising and no social media trackers.</p>
 <h4>Your choices</h4><p>Sign out to remove the session. You can clear the rest in your browser settings, and the app will forget your preferences. Because this storage is essential, there is nothing to switch off. If we add anything optional later, we will ask first.</p>`]};
 function openDoc(k){openModal("<h3>"+DOCS[k][0]+'</h3><div class="doc">'+DOCS[k][1]+"</div>",true)}
