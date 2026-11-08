@@ -126,6 +126,17 @@ select.st option{color:#000;background:#fff}
 .menu button{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:6px}.menu button:hover,.menu button:focus-visible{background:var(--card2)}
 .tag{display:inline-block;font-style:normal;font-size:10px;font-weight:700;background:var(--card2);border-radius:4px;padding:1px 6px;margin-right:8px;color:var(--mut)}
 .fld textarea{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;resize:vertical}
+body:not([data-owner]) .own{display:none!important}
+body.edt #dash [data-lab]{outline:1px dashed var(--acc);outline-offset:2px;cursor:text}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}.ch .s{margin-bottom:10px}
+.ib{width:26px;height:26px;border-radius:6px;display:inline-grid;place-items:center;color:var(--mut);vertical-align:middle}.ib:hover{background:var(--card2);color:var(--text)}
+.act{white-space:nowrap;text-align:right}small.sub{display:block;color:var(--mut);font-size:11px;margin-top:2px}
+.hb i.x{background:var(--bad)}.sys .own{margin-left:6px!important;color:var(--text)!important}
+.fld input[type=date],.fld input[type=time],.fld input[type=number]{width:100%;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+.facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.btn.ghost{background:var(--card2);color:var(--text)}.btn.dng{background:var(--bad);color:#fff}
+.modal.form .acts{display:none}
+.bellb[aria-pressed=true]{background:var(--card2)}
+.sys>div{flex:1;min-width:0}.sys>span{flex:none;white-space:nowrap}.sys .own{display:inline-flex;align-items:center}
 </style>
 </head>
 <body data-theme="navy">
@@ -140,17 +151,18 @@ select.st option{color:#000;background:#fff}
   <div class="top">
     <div class="crumb"><svg class="i" viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg><span id="crumbT">Lier Consig Dashboard</span></div>
     <div class="tools">
-      <span class="upd">Sample data</span>
+      <span class="upd" data-lab="sampleTag">Sample data</span><span class="upd" id="saveState" role="status"></span>
       <button class="chip" id="themeBtn"></button>
       <button class="chip" id="signOut">Sign out</button>
       <button class="bellb" id="bell" aria-label="Notifications"><svg class="i" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><b id="bellN">0</b></button>
       <button class="bellb" id="editBtn" hidden aria-label="Edit dashboard" title="Edit dashboard"><svg class="i" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+      <button class="bellb" id="editTextBtn" hidden aria-pressed="false" aria-label="Edit text mode: click any label to change it" title="Edit text: click any label to change it"><svg class="i" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></button>
     </div>
   </div>
 
   <div id="dash">
     <div class="head">
-      <div><h1 id="pageTitle">Lier Consig Dashboard</h1><p>Your business at a glance. Performance, priorities, and the signals that matter.</p></div>
+      <div><h1 id="pageTitle">Lier Consig Dashboard</h1><p id="subtitle" data-lab="subtitle">Your business at a glance. Performance, priorities, and the signals that matter.</p></div>
       
     </div>
 
@@ -160,29 +172,29 @@ select.st option{color:#000;background:#fff}
     </section><div class="clock"><small id="cdate"></small><div class="cities" id="cities"></div><div class="hint">Click a city to change it</div></div></div>
 
     <div class="filters">
-      <span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M3 5h18v16H3zM3 10h18M8 3v4M16 3v4"/></svg><span id="range"></span></span>
+      <span class="chip"><svg class="i" viewBox="0 0 24 24"><path d="M3 5h18v16H3zM3 10h18M8 3v4M16 3v4"/></svg><span id="range" data-lab="range"></span></span>
       <div class="quick" id="quick"></div>
     </div>
 
     <div class="grid4" id="kpis"></div>
 
     <div class="row2" id="row1">
-      <section class="card"><h3>Executive task tracker</h3><p class="s">Tasks, approvals, and follow-ups for the executive team</p>
-        <div class="scroll"><table><thead><tr><th>Task</th><th>Due date</th><th>Owner</th><th>Status</th></tr></thead><tbody id="tasks"></tbody></table></div></section>
-      <section class="card"><div style="display:flex;justify-content:space-between"><h3>Next meeting</h3><span class="badge">3</span></div><p class="s">Executive review · 11:30 AM · Jordan Lee</p><div id="meets"></div>
-        <button class="link" id="agenda">View meeting agenda →</button></section>
+      <section class="card"><div class="ch"><div><h3 data-lab="tasksTitle">Executive task tracker</h3><p class="s" data-lab="tasksSub">Tasks, approvals, and follow-ups for the executive team</p></div><button class="chip own" data-add="task">+ Add task</button></div>
+        <div class="scroll"><table><thead><tr><th data-lab="tH1">Task</th><th data-lab="tH2">Due date</th><th data-lab="tH3">Owner</th><th data-lab="tH4">Status</th><th class="own"></th></tr></thead><tbody id="tasks"></tbody></table></div></section>
+      <section class="card"><div class="ch"><h3 data-lab="nextTitle">Next meeting</h3><span class="badge" id="agN">0</span></div><p class="s" id="nextSub" style="margin-bottom:2px"></p><p class="s" id="nextMeta"></p><div id="meets"></div>
+        <div class="ch" style="margin-top:6px"><button class="link" id="agenda" data-lab="agendaLink">View meeting agenda →</button><span class="own"><button class="chip" id="editNext">Edit meeting</button> <button class="chip" data-add="agenda">+ Add agenda item</button></span></div></section>
     </div>
 
     <div class="row2" id="row2">
-      <section class="card"><div style="display:flex;justify-content:space-between"><div><h3>Meeting logs</h3><p class="s">Recent discussions, action items, and follow-up owners</p></div><button class="link" id="allLogs">View all logs ↗</button></div>
-        <div class="scroll"><table><thead><tr><th>Meeting</th><th>Date</th><th>Owner</th><th>Status</th><th>Action items</th><th>Notes</th></tr></thead><tbody id="logs"></tbody></table></div>
-        <div class="foot"><span>4 recent meetings</span><span style="color:var(--warn)">1 urgent follow-up</span></div></section>
-      <section class="card"><h3>Internal Resources</h3><p class="s">Sample list for the demo.</p>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mut)"><span>5 healthy</span><span style="color:var(--warn)">1 sync delayed</span></div>
-        <div class="hb"><i></i><i></i><i></i><i></i><i></i><i class="d"></i></div><div id="sys"></div>
-        <p class="s" style="margin:12px 0 0;color:var(--warn)">SAP sync delayed · Next retry at 09:45</p></section>
+      <section class="card"><div class="ch"><div><h3 data-lab="logsTitle">Meeting logs</h3><p class="s" data-lab="logsSub">Recent discussions, action items, and follow-up owners</p></div><span><button class="chip own" data-add="log">+ Add meeting</button> <button class="link" id="allLogs" data-lab="allLogs">View all logs ↗</button></span></div>
+        <div class="scroll"><table><thead><tr><th data-lab="lH1">Meeting</th><th data-lab="lH2">Date</th><th data-lab="lH3">Owner</th><th data-lab="lH4">Status</th><th data-lab="lH5">Action items</th><th data-lab="lH6">Notes</th><th class="own"></th></tr></thead><tbody id="logs"></tbody></table></div>
+        <div class="foot"><span id="logsCnt"></span><span id="logsUrg" style="color:var(--warn)"></span></div></section>
+      <section class="card"><div class="ch"><div><h3 data-lab="resTitle">Internal Resources</h3><p class="s" data-lab="resSub">Sample list for the demo.</p></div><button class="chip own" data-add="res">+ Add resource</button></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--mut)"><span id="rH"></span><span id="rD" style="color:var(--warn)"></span></div>
+        <div class="hb" id="hb"></div><div id="sys"></div>
+        <p class="s" id="rNote" style="margin:12px 0 0;color:var(--warn)"></p></section>
     </div>
-    <div class="foot"><span>Sample data for demonstration</span><span><button data-doc="privacy">Privacy Policy</button> · <button data-doc="terms">Terms</button> · <button data-doc="cookies">Cookie Policy</button></span></div>
+    <div class="foot"><span data-lab="footL">Sample data for demonstration</span><span><button data-doc="privacy">Privacy Policy</button> · <button data-doc="terms">Terms</button> · <button data-doc="cookies">Cookie Policy</button></span></div>
   </div>
 
   <div id="other" hidden><h1 id="oT" style="margin-top:8px"></h1><p class="head" style="color:var(--mut);margin-top:6px" id="oD"></p>
@@ -200,10 +212,27 @@ const store={get(k,d){try{const v=localStorage.getItem("ed."+k);return v?JSON.pa
 const ic=d=>`<svg class="i" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
 const NAV=[["Dashboard","M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z","Your business at a glance."],["Client","M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z","Clients and their workspaces."],["Add google workspace","M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18","Connect your Google Sheet, Calendar and Gmail."],["Send invitation","M22 2L11 13M22 2l-7 20-4-9-9-4z","Invite a client by email. They receive a one-time code to unlock the app."],["Asset","M3 7h18v13H3zM8 7V4h8v3","Assets and shared materials."],["Agent","M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM6 19a6 6 0 0 1 12 0","Automations and AI helpers."],["Tools","M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.5 2.5-2.2-.5-.5-2.2z","Everyday tools."],["File","M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6","Files and documents."],["Subscription","M2 5h20v14H2zM2 10h20","Services and costs: what the app runs on, and which plans are free or paid."]];
 const TONE={"Urgent":"bad","Pending approval":"warn","In progress":"info","Approved":"good"};
-let TASKS=store.get("tasks",[["Finalize Q4 executive summary","Nov 04, 2026","Jordan Lee","Urgent"],["Approve operations capacity plan","Nov 04, 2026","Sarah Patel","Pending approval"],["Review regional delivery recovery","Nov 05, 2026","Michael Chen","In progress"],["Sign off board meeting agenda","Nov 06, 2026","Emma Wilson","Approved"],["Confirm annual planning priorities","Nov 09, 2026","Alex Rivera","Pending approval"]]);
-const MEETS=[["Review Q4 executive summary","Jordan Lee · 11:30 AM · Boardroom","MC","Jordan Lee","11:30 AM","warn"],["Confirm world clock handoff","London, Tokyo, New York · 3 regions","SP","Sarah Patel","09:45","good"],["Prepare leadership talking points","Key themes: revenue, margin, delivery","AR","Alex Rivera","10:08 AM","info"]];
-const LOGS=[["ES","Leadership offsite","Jordan Lee","Oct 31","Approved",3,"good"],["OS","Ops review","Sarah Patel","Oct 30","Pending",2,"warn"],["SC","Customer call","Michael Chen","Oct 29","Urgent",1,"bad"],["CP","Board prep","Emma Wilson","Oct 28","Approved",1,"good"]];
-const SYS=[["sf","Salesforce","CRM","Healthy"],["N","NetSuite","Finance","Healthy"],["SAP","SAP S/4HANA","Supply chain","18m lag"],["W","Workday","People","Healthy"],["Z","Zendesk","Support","Healthy"],["S","Snowflake","Data","Healthy"]];
+const LSTAT={"Approved":"good","Pending":"warn","Urgent":"bad","In progress":"info"};
+const RSTAT={healthy:["Healthy","good"],delayed:["Sync delayed","warn"],down:["Down","bad"]};
+const uid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2);
+const QDEF=["Client Preferences","Templates","Weekly progress report tracker","Event Planning","Automation"];
+function defaults(){return{
+  labels:{subtitle:"Your business at a glance. Performance, priorities, and the signals that matter.",range:"Oct 1 – Oct 31, 2026",sampleTag:"Sample data",
+    q1:QDEF[0],q2:QDEF[1],q3:QDEF[2],q4:QDEF[3],q5:QDEF[4],
+    k1:"Today's schedule",k2:"Pending approval",k3:"Priority task",k4:"Meeting activity",pendFoot:"Next review: 2:00 PM · Ops committee",
+    tasksTitle:"Executive task tracker",tasksSub:"Tasks, approvals, and follow-ups for the executive team",tH1:"Task",tH2:"Due date",tH3:"Owner",tH4:"Status",
+    nextTitle:"Next meeting",agendaLink:"View meeting agenda →",
+    logsTitle:"Meeting logs",logsSub:"Recent discussions, action items, and follow-up owners",allLogs:"View all logs ↗",lH1:"Meeting",lH2:"Date",lH3:"Owner",lH4:"Status",lH5:"Action items",lH6:"Notes",
+    resTitle:"Internal Resources",resSub:"Sample list for the demo.",footL:"Sample data for demonstration"},
+  tasks:[["Finalize Q4 executive summary","2026-11-04","Jordan Lee","Urgent"],["Approve operations capacity plan","2026-11-04","Sarah Patel","Pending approval"],["Review regional delivery recovery","2026-11-05","Michael Chen","In progress"],["Sign off board meeting agenda","2026-11-06","Emma Wilson","Approved"],["Confirm annual planning priorities","2026-11-09","Alex Rivera","Pending approval"]].map(t=>({id:uid(),title:t[0],desc:"",due:t[1],owner:t[2],status:t[3]})),
+  next:{title:"Executive review",date:"2026-11-04",time:"11:30",location:"Boardroom",participants:"Jordan Lee, Sarah Patel",owner:"Jordan Lee"},
+  agenda:[["Review Q4 executive summary","Boardroom","Jordan Lee","11:30"],["Confirm world clock handoff","London, Tokyo, New York · 3 regions","Sarah Patel","09:45"],["Prepare leadership talking points","Key themes: revenue, margin, delivery","Alex Rivera","10:08"]].map(a=>({id:uid(),title:a[0],desc:a[1],owner:a[2],time:a[3]})),
+  logs:[["Leadership offsite","Jordan Lee","2026-10-31","Approved",3,"Approved"],["Ops review","Sarah Patel","2026-10-30","Pending",2,"Pending"],["Customer call","Michael Chen","2026-10-29","Urgent",1,"Urgent"],["Board prep","Emma Wilson","2026-10-28","Approved",1,"Approved"]].map(l=>({id:uid(),name:l[0],owner:l[1],date:l[2],status:l[3],items:l[4],notes:l[5]})),
+  resources:[["Salesforce","CRM","healthy",""],["NetSuite","Finance","healthy",""],["SAP S/4HANA","Supply chain","delayed","18m lag"],["Workday","People","healthy",""],["Zendesk","Support","healthy",""],["Snowflake","Data","healthy",""]].map(r=>({id:uid(),name:r[0],desc:r[1],status:r[2],note:r[3]})),
+  updated:null}}
+const mergeData=(saved)=>{const d=defaults();return {...d,...saved,labels:{...d.labels,...(saved&&saved.labels||{})}}};
+const emptyData=()=>({...defaults(),tasks:[],agenda:[],logs:[],resources:[],next:{title:"",date:"",time:"",location:"",participants:"",owner:""}});
+let DATA=mergeData(store.get("data",null));
 let q="";
 
 /* theme */
@@ -216,10 +245,10 @@ $("#themeBtn").onclick=()=>{openModal('<h3>Choose a color theme</h3><div class="
 /* modal */
 const veil=$("#veil");
 let lastF;
-function openModal(h,wide){lastF=document.activeElement;const m=$("#modal");m.className="modal"+(wide?" wide":"");m.innerHTML=h+'<div class="acts"><button class="btn" data-x>Close</button></div>';veil.classList.add("on");m.querySelector("[data-x]").onclick=closeModal;m.tabIndex=-1;m.focus()}
+function openModal(h,wide,cls){lastF=document.activeElement;const m=$("#modal");m.className="modal"+(wide?" wide":"")+(cls?" "+cls:"");m.innerHTML=h+'<div class="acts"><button class="btn" data-x>Close</button></div>';veil.classList.add("on");m.querySelector("[data-x]").onclick=closeModal;m.tabIndex=-1;m.focus()}
 function closeModal(){if(editing){editing=false;CFG=snap;applyCfg()}veil.classList.remove("on");if(lastF&&lastF.focus)lastF.focus()}
 veil.onclick=e=>{if(e.target===veil)closeModal()};
-document.addEventListener("keydown",e=>{if(!veil.classList.contains("on"))return;if(e.key==="Escape")closeModal();if(e.key==="Tab"){const m=$("#modal"),f=[...m.querySelectorAll("button,a[href],input,select")].filter(x=>!x.disabled);if(!f.length)return;const a=f[0],z=f[f.length-1],c=document.activeElement;if(e.shiftKey&&(c===a||c===m)){e.preventDefault();z.focus()}else if(!e.shiftKey&&c===z){e.preventDefault();a.focus()}}});
+document.addEventListener("keydown",e=>{if(!veil.classList.contains("on"))return;if(e.key==="Escape")closeModal();if(e.key==="Tab"){const m=$("#modal"),f=[...m.querySelectorAll("button,a[href],input,select,textarea")].filter(x=>!x.disabled&&x.offsetParent!==null);if(!f.length)return;const a=f[0],z=f[f.length-1],c=document.activeElement;if(e.shiftKey&&(c===a||c===m)){e.preventDefault();z.focus()}else if(!e.shiftKey&&c===z){e.preventDefault();a.focus()}}});
 
 /* nav */
 const nav=$("#nav");
@@ -286,11 +315,6 @@ $("#editBtn").onclick=editPanel;
 async function loadCfg(){if(DEMO||!sb)return;const {data,error}=await sb.from("app_settings").select("data").eq("id",1).maybeSingle();if(!error&&data&&data.data){CFG={...DEF,...data.data};applyCfg()}}
 applyCfg();
 async function persistCfg(){store.set("cfg",CFG);if(DEMO)return "";const {error}=await sb.from("app_settings").upsert({id:1,data:CFG,updated_at:new Date().toISOString()});return error?"Saved on this device only. Clients will not see it until the settings table exists in Supabase.":""}
-
-/* small sections under the title */
-const QUICK=["Client Preferences","Templates","Weekly progress report tracker","Event Planning","Automation"];
-$("#quick").innerHTML=QUICK.map(q=>`<button>${q}</button>`).join("");
-[...$("#quick").children].forEach((b,i)=>b.onclick=()=>openModal(`<h3>${QUICK[i]}</h3><p>This section is clickable now. Its content will be set up in the next build step.</p>`));
 
 /* executive file */
 const BUCKET="executive-files",MAXMB=25;
@@ -392,29 +416,123 @@ function noteModal(i,fid,doc){
 }
 
 /* filters */
-$("#range").textContent="Oct 1 – Oct 31, 2026";
 
-/* kpis */
-const spark=(p,c)=>{const mx=Math.max(...p),mn=Math.min(...p);const pts=p.map((v,i)=>`${i*14},${30-(v-mn)/(mx-mn||1)*26}`).join(" ");return `<svg width="84" height="34" viewBox="0 0 84 34"><polyline points="${pts}" fill="none" stroke="var(--${c})" stroke-width="2" stroke-linejoin="round"/></svg>`};
-const cnt=s=>TASKS.filter(t=>t[3]===s).length;
-function kpis(){const u=cnt("Urgent"),p=cnt("Pending approval");const top=TASKS.find(t=>t[3]==="Urgent");
-  const K=[["Today's schedule","M8 2v4M16 2v4M3 8h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2z","4 events","2 in progress","good","Next: 11:30 AM · Executive review",[3,4,3,5,6,6,8],"good"],
-   ["Pending approval","M3 20h18M7 16V9M12 16V5M17 16v-4",(u+p)+" items",u+" urgent",u?"bad":"good","Next review: 2:00 PM · Ops committee",[2,3,3,4,5,5,7],"good"],
-   ["Priority task","M1 6h13v10H1zM14 10h4l3 3v3h-7z",u+(u===1?" task":" tasks"),"Due today","warn",top?top[0]:"Nothing urgent",[8,7,7,5,5,4,3],"bad"],
-   ["Meeting activity","M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01","12 logs","3 action items","good","Last updated: 09:42 EDT",[4,5,4,6,7,8,9],"good"]];
-  $("#kpis").innerHTML=K.map(k=>`<div class="card kpi"><div class="l">${k[0]}${ic(k[1])}</div><div class="n">${k[2]}</div><div class="m"><span class="pill" style="--c:var(--${k[4]})">${k[3]}</span>${spark(k[6],k[7])}</div><div class="f">${k[5]}</div></div>`).join("");
+
+/* ===== dashboard data: render ===== */
+const fmtD=(iso,short)=>{if(!iso)return "";const d=new Date(iso+"T00:00:00");return isNaN(d)?iso:new Intl.DateTimeFormat("en-US",short?{month:"short",day:"numeric"}:{month:"short",day:"2-digit",year:"numeric"}).format(d)};
+const fmtT=t=>{if(!t)return "";const [h,m]=t.split(":").map(Number);return ((h%12)||12)+":"+String(m).padStart(2,"0")+(h>=12?" PM":" AM")};
+const ini=n=>String(n||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase()||"?";
+const cnt=s=>DATA.tasks.filter(t=>t.status===s).length;
+const spark=(n,c)=>{const p=n<2?[0,n,n]:Array.from({length:n},(_,i)=>i+1),mx=Math.max(...p),mn=Math.min(...p);const pts=p.map((v,i)=>`${i*(84/(p.length-1))},${30-(v-mn)/(mx-mn||1)*26}`).join(" ");return `<svg width="84" height="34" viewBox="0 0 84 34"><polyline points="${pts}" fill="none" stroke="var(--${c})" stroke-width="2" stroke-linejoin="round"/></svg>`};
+const IC={pen:"M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z",del:"M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"};
+const btns=(k,id,label)=>`<span class="own"><button class="ib" data-e="${k}" data-id="${id}" aria-label="Edit ${esc(label)}" title="Edit">${ic(IC.pen)}</button><button class="ib" data-x="${k}" data-id="${id}" aria-label="Delete ${esc(label)}" title="Delete">${ic(IC.del)}</button></span>`;
+function renderLabels(){document.querySelectorAll("[data-lab]").forEach(e=>{const v=DATA.labels[e.dataset.lab];if(v!==undefined)e.textContent=v})}
+function kpis(){
+  const u=cnt("Urgent"),p=cnt("Pending approval"),L=DATA.labels,top=DATA.tasks.find(t=>t.status==="Urgent"),ag=DATA.agenda.length,nx=DATA.next;
+  const acts=DATA.logs.reduce((a,l)=>a+(+l.items||0),0);
+  const upd=DATA.updated?new Date(DATA.updated).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"not yet";
+  const K=[["k1","M8 2v4M16 2v4M3 8h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2z",ag+(ag===1?" event":" events"),nx.date?fmtD(nx.date,1):"No date","good",(nx.title||nx.time?"Next: "+[fmtT(nx.time),nx.title].filter(Boolean).join(" · "):"Next: none"),ag,"good",""],
+    ["k2","M3 20h18M7 16V9M12 16V5M17 16v-4",(u+p)+(u+p===1?" item":" items"),u+" urgent",u?"bad":"good",L.pendFoot,u+p,"good","pendFoot"],
+    ["k3","M1 6h13v10H1zM14 10h4l3 3v3h-7z",u+(u===1?" task":" tasks"),top&&top.due?"Due "+fmtD(top.due,1):"None due","warn",top?top.title:"Nothing urgent",u,"bad",""],
+    ["k4","M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01",DATA.logs.length+(DATA.logs.length===1?" log":" logs"),acts+" action items","good","Last updated: "+upd,DATA.logs.length,"good",""]];
+  $("#kpis").innerHTML=K.map(k=>`<div class="card kpi"><div class="l"><span data-lab="${k[0]}">${esc(L[k[0]])}</span>${ic(k[1])}</div><div class="n">${esc(k[2])}</div><div class="m"><span class="pill" style="--c:var(--${k[4]})">${esc(k[3])}</span>${spark(k[6],k[7])}</div><div class="f"${k[8]?` data-lab="${k[8]}"`:""}>${esc(k[5])}</div></div>`).join("");
   const n=u+p;$("#bellN").textContent=n;$("#bellN").hidden=!n}
+function tasks(){
+  $("#tasks").innerHTML=DATA.tasks.map(t=>`<tr><td>${esc(t.title)}${t.desc?`<small class="sub">${esc(t.desc)}</small>`:""}</td><td style="color:var(--mut)">${fmtD(t.due)}</td><td>${esc(t.owner)}</td><td><select class="st" data-id="${t.id}" style="--c:var(--${TONE[t.status]||"info"})" aria-label="Status of ${esc(t.title)}">${Object.keys(TONE).map(s=>`<option${s===t.status?" selected":""}>${s}</option>`).join("")}</select></td><td class="act own">${btns("task",t.id,t.title)}</td></tr>`).join("")||`<tr><td colspan="5" style="color:var(--mut)">No tasks yet.${role==="owner"?" Use Add task.":""}</td></tr>`}
+function next(){
+  const n=DATA.next,a=DATA.agenda,T=["warn","good","info"];
+  $("#agN").textContent=a.length;
+  $("#nextSub").textContent=[n.title,fmtT(n.time),n.owner].filter(Boolean).join(" · ")||"No meeting set";
+  $("#nextMeta").textContent=[fmtD(n.date),n.location,n.participants?"With "+n.participants:""].filter(Boolean).join(" · ");
+  $("#meets").innerHTML=a.map((m,i)=>`<div class="mt" style="--c:var(--${T[i%3]})"><div><b>${esc(m.title)}</b><small>${esc(m.desc)}</small><small style="margin-top:6px"><span class="av2">${esc(ini(m.owner))}</span>${esc(m.owner)}</small></div><div style="text-align:right"><small style="white-space:nowrap">${fmtT(m.time)}</small>${btns("agenda",m.id,m.title)}</div></div>`).join("")||'<p class="s">No agenda items yet.</p>'}
+function logs(){
+  $("#logs").innerHTML=DATA.logs.map(l=>{const tone=LSTAT[l.status]||"info",n=+l.items||0;return `<tr><td><span class="av2">${esc(ini(l.name))}</span>${esc(l.name)}</td><td>${fmtD(l.date,1)}</td><td>${esc(l.owner)}</td><td>${esc(l.status)}</td><td><span class="bar" style="--c:var(--${tone==="bad"?"warn":"good"})"><i style="width:${Math.min(100,n*34)}%"></i></span>${n} item${n===1?"":"s"}</td><td><span class="pill" style="--c:var(--${tone})">${esc(l.notes||l.status)}</span></td><td class="act own">${btns("log",l.id,l.name)}</td></tr>`}).join("")||`<tr><td colspan="7" style="color:var(--mut)">No meeting logs yet.${role==="owner"?" Use Add meeting.":""}</td></tr>`;
+  const n=DATA.logs.length,u=DATA.logs.filter(l=>l.status==="Urgent").length;
+  $("#logsCnt").textContent=n+(n===1?" recent meeting":" recent meetings");$("#logsUrg").textContent=u?u+(u===1?" urgent follow-up":" urgent follow-ups"):""}
+function sys(){
+  const R=DATA.resources,h=R.filter(r=>r.status==="healthy").length,d=R.filter(r=>r.status==="delayed").length,x=R.filter(r=>r.status==="down").length,bad=R.find(r=>r.status!=="healthy");
+  $("#rH").textContent=h+" healthy";$("#rD").textContent=[d&&d+" sync delayed",x&&x+" down"].filter(Boolean).join(" · ");
+  $("#hb").innerHTML=R.map(r=>`<i class="${r.status==="delayed"?"d":r.status==="down"?"x":""}"></i>`).join("");
+  $("#sys").innerHTML=R.map(r=>{const st=RSTAT[r.status]||RSTAT.healthy;return `<div class="sys"><span class="lg" style="margin:0;color:var(--text)">${esc(ini(r.name))}</span><div><b style="font-size:13px">${esc(r.name)}</b> <small style="color:var(--mut)">${esc(r.desc)}</small></div><span style="--c:var(--${st[1]})">● ${r.status==="healthy"?"Healthy":esc(r.note||st[0])}</span>${btns("res",r.id,r.name)}</div>`}).join("")||'<p class="s">No resources yet.</p>';
+  $("#rNote").textContent=bad?`${bad.name} ${bad.status==="down"?"is down":"sync delayed"}${bad.note?" · "+bad.note:""}`:""}
+function renderQuick(){$("#quick").innerHTML=[1,2,3,4,5].map(i=>`<button data-lab="q${i}">${esc(DATA.labels["q"+i])}</button>`).join("");
+  [...$("#quick").children].forEach(b=>b.onclick=()=>openModal(`<h3>${esc(b.textContent)}</h3><p>This section is clickable now. Its content will be set up in the next build step.</p>`))}
+function renderAll(){renderLabels();renderQuick();kpis();tasks();next();logs();sys()}
 
-/* tables */
-const hit=a=>!q||a.join(" ").toLowerCase().includes(q);
-function tasks(){$("#tasks").innerHTML=TASKS.filter(hit).map(t=>{const i=TASKS.indexOf(t);return `<tr><td>${t[0]}</td><td style="color:var(--mut)">${t[1]}</td><td>${t[2]}</td><td><select class="st" data-i="${i}" style="--c:var(--${TONE[t[3]]})" aria-label="Status">${Object.keys(TONE).map(s=>`<option${s===t[3]?" selected":""}>${s}</option>`).join("")}</select></td></tr>`}).join("")||'<tr><td colspan="4" style="color:var(--mut)">No matching tasks</td></tr>';
-  document.querySelectorAll("select.st").forEach(s=>s.onchange=()=>{TASKS[+s.dataset.i][3]=s.value;store.set("tasks",TASKS);tasks();kpis()})}
-function logs(){$("#logs").innerHTML=LOGS.filter(hit).map(l=>`<tr><td><span class="av2">${l[0]}</span>${l[1]}</td><td>${l[3]}</td><td>${l[2]}</td><td>${l[4]}</td><td><span class="bar" style="--c:var(--${l[6]==="bad"?"warn":"good"})"><i style="width:${Math.min(100,l[5]*34)}%"></i></span>${l[5]} item${l[5]>1?"s":""}</td><td><span class="pill" style="--c:var(--${l[6]})">${l[4]}</span></td></tr>`).join("")||'<tr><td colspan="6" style="color:var(--mut)">No matching logs</td></tr>'}
-$("#meets").innerHTML=MEETS.map(m=>`<div class="mt" style="--c:var(--${m[5]})"><div><b>${m[0]}</b><small>${m[1]}</small><small style="margin-top:6px"><span class="av2">${m[2]}</span>${m[3]}</small></div><small style="white-space:nowrap">${m[4]}</small></div>`).join("");
-$("#sys").innerHTML=SYS.map(s=>`<div class="sys"><span class="lg" style="margin:0;color:var(--text)">${s[0]}</span><div><b style="font-size:13px">${s[1]}</b> <small style="color:var(--mut)">${s[2]}</small></div><span style="--c:var(${s[3]==="Healthy"?"--good":"--warn"})">● ${s[3]}</span></div>`).join("");
-$("#agenda").onclick=()=>openModal("<h3>Meeting agenda</h3><p>The full agenda will open here once meetings are connected to your Google Sheet.</p>");
-$("#allLogs").onclick=()=>openModal("<h3>All meeting logs</h3><p>The full list will open here in the next build step.</p>");
-$("#bell").onclick=()=>{const a=TASKS.filter(t=>t[3]==="Urgent"||t[3]==="Pending approval");openModal("<h3>Needs your attention</h3>"+(a.length?a.map(t=>`<p style="color:var(--text);margin-bottom:8px"><span class="pill" style="--c:var(--${TONE[t[3]]})">${t[3]}</span> ${t[0]}<br><small style="color:var(--mut)">${t[2]} · due ${t[1]}</small></p>`).join(""):"<p>Nothing needs attention right now.</p>"))};
+/* ===== dashboard data: save and load ===== */
+function setSave(m,bad){const e=$("#saveState");if(e){e.textContent=m;e.style.color=bad?"var(--bad)":""}}
+async function persist(){
+  if(role!=="owner")return;
+  DATA.updated=new Date().toISOString();store.set("data",DATA);
+  if(DEMO||!sb){setSave("Saved on this device");return}
+  const {error}=await sb.from("dashboard_data").upsert({id:1,data:DATA,updated_at:DATA.updated});
+  if(error)setSave("Saved on this device only. Run supabase-dashboard.sql to save to the database.",1);
+  else setSave("Saved "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}));
+}
+async function loadData(){
+  if(role!=="owner"){DATA=emptyData();renderAll();return}
+  if(DEMO||!sb){renderAll();return}
+  const {data,error}=await sb.from("dashboard_data").select("data").eq("id",1).maybeSingle();
+  if(error){setSave("Showing the copy on this device. Run supabase-dashboard.sql to save to the database.",1);renderAll();return}
+  if(data&&data.data){DATA=mergeData(data.data);store.set("data",DATA);renderAll()}
+  else{renderAll();await persist()}
+}
+async function commit(){renderAll();await persist()}
+
+/* ===== dashboard data: add, edit, delete ===== */
+const fld=(f,v)=>{const id="gf_"+f.k,a=`id="${id}" name="${f.k}"${f.req?" required":""}${f.max?` maxlength="${f.max}"`:""}`,val=v===undefined||v===null?"":v;
+  let c;
+  if(f.type==="textarea")c=`<textarea ${a} rows="3">${esc(val)}</textarea>`;
+  else if(f.type==="select")c=`<select ${a}>${f.opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(val)?" selected":""}>${esc(o[1])}</option>`).join("")}</select>`;
+  else c=`<input ${a} type="${f.type||"text"}"${f.type==="number"?' min="0" max="999"':""} value="${esc(val)}">`;
+  return `<div class="fld"><label for="${id}">${esc(f.label)}</label>${c}</div>`};
+function formModal(o){
+  openModal(`<h3>${esc(o.title)}</h3><form id="gform">${o.fields.map(f=>fld(f,(o.vals||{})[f.k])).join("")}<div class="facts"><button class="btn" type="submit">Save</button><button class="btn ghost" type="button" id="gcancel">Cancel</button>${o.onDelete?'<button class="btn dng" type="button" id="gdel">Delete</button>':""}</div></form>`,false,"form");
+  const first=$("#gform").querySelector("input,textarea,select");if(first)first.focus();
+  $("#gcancel").onclick=closeModal;
+  if(o.onDelete)$("#gdel").onclick=o.onDelete;
+  $("#gform").onsubmit=e=>{e.preventDefault();const v=Object.fromEntries(new FormData(e.target));(o.num||[]).forEach(k=>v[k]=Math.max(0,Math.min(999,+v[k]||0)));Object.keys(v).forEach(k=>{if(typeof v[k]==="string"&&e.target.elements[k].type!=="textarea")v[k]=v[k].trim()});closeModal();o.onSave(v)}
+}
+const SPEC={
+  task:{label:"task",col:"tasks",blank:{status:"Pending approval"},fields:[{k:"title",label:"Task title",req:1,max:120},{k:"desc",label:"Description",type:"textarea",max:500},{k:"due",label:"Due date",type:"date"},{k:"owner",label:"Owner",max:60},{k:"status",label:"Status",type:"select",opts:Object.keys(TONE).map(k=>[k,k])}]},
+  agenda:{label:"agenda item",col:"agenda",blank:{},fields:[{k:"title",label:"Title",req:1,max:120},{k:"desc",label:"Description",type:"textarea",max:300},{k:"owner",label:"Owner or participant",max:60},{k:"time",label:"Time",type:"time"}]},
+  log:{label:"meeting log",col:"logs",blank:{status:"Pending",items:0},num:["items"],fields:[{k:"name",label:"Meeting name",req:1,max:120},{k:"date",label:"Date",type:"date"},{k:"owner",label:"Owner",max:60},{k:"status",label:"Status",type:"select",opts:Object.keys(LSTAT).map(k=>[k,k])},{k:"items",label:"Number of action items",type:"number"},{k:"notes",label:"Notes",max:80}]},
+  res:{label:"resource",col:"resources",blank:{status:"healthy"},fields:[{k:"name",label:"Resource name",req:1,max:60},{k:"desc",label:"Description",max:80},{k:"status",label:"Health",type:"select",opts:[["healthy","Healthy"],["delayed","Sync delayed"],["down","Down"]]},{k:"note",label:"Status note, for example 18m lag",max:60}]}
+};
+function editRec(kind,id){
+  const sp=SPEC[kind],col=DATA[sp.col],rec=id?col.find(r=>r.id===id):null;
+  formModal({title:(rec?"Edit ":"Add ")+sp.label,fields:sp.fields,vals:rec||sp.blank,num:sp.num,
+    onSave:v=>{if(rec)Object.assign(rec,v);else col.push({id:uid(),...v});commit()},
+    onDelete:rec?()=>delRec(kind,id):null});
+}
+function delRec(kind,id){
+  const sp=SPEC[kind],col=DATA[sp.col],i=col.findIndex(r=>r.id===id);if(i<0)return;
+  if(!confirm("Delete this "+sp.label+"? This cannot be undone."))return;
+  col.splice(i,1);closeModal();commit();
+}
+function editNext(){
+  formModal({title:"Edit next meeting",vals:DATA.next,fields:[{k:"title",label:"Meeting title",max:120},{k:"date",label:"Date",type:"date"},{k:"time",label:"Time",type:"time"},{k:"location",label:"Location",max:100},{k:"owner",label:"Organizer",max:60},{k:"participants",label:"Participants",type:"textarea",max:300}],
+    onSave:v=>{Object.assign(DATA.next,v);commit()}});
+}
+$("#dash").addEventListener("click",e=>{
+  const b=e.target.closest("[data-e],[data-x],[data-add]");if(!b||role!=="owner")return;
+  if(b.dataset.add)return editRec(b.dataset.add,null);
+  if(b.dataset.e)return editRec(b.dataset.e,b.dataset.id);
+  if(b.dataset.x)return delRec(b.dataset.x,b.dataset.id);
+});
+$("#editNext").onclick=editNext;
+$("#tasks").onchange=e=>{const s=e.target.closest("select.st");if(!s)return;const t=DATA.tasks.find(x=>x.id===s.dataset.id);if(t){t.status=s.value;commit()}};
+/* click any label to change it (owner, Edit text mode) */
+let editText=false;
+$("#editTextBtn").onclick=()=>{editText=!editText;document.body.classList.toggle("edt",editText);$("#editTextBtn").setAttribute("aria-pressed",String(editText))};
+$("#dash").addEventListener("click",e=>{
+  if(!editText||role!=="owner")return;const el=e.target.closest("[data-lab]");if(!el)return;
+  e.preventDefault();e.stopPropagation();const k=el.dataset.lab;
+  formModal({title:"Edit text",vals:{v:DATA.labels[k]},fields:[{k:"v",label:"Text",type:/subtitle|Sub$/.test(k)?"textarea":"text",max:200}],onSave:o=>{DATA.labels[k]=o.v;commit()}});
+},true);
+$("#agenda").onclick=()=>{if(editText)return;openModal(`<h3>Meeting agenda</h3><p style="color:var(--text)">${esc(DATA.next.title||"No meeting set")}</p>`+(DATA.agenda.length?DATA.agenda.map(m=>`<p style="color:var(--text);margin-bottom:8px"><b>${fmtT(m.time)}</b> ${esc(m.title)}<br><small style="color:var(--mut)">${esc(m.desc)} · ${esc(m.owner)}</small></p>`).join(""):"<p>No agenda items yet.</p>"))};
+$("#allLogs").onclick=()=>{if(editText)return;openModal("<h3>All meeting logs</h3>"+(DATA.logs.length?DATA.logs.map(l=>`<p style="color:var(--text);margin-bottom:8px"><b>${esc(l.name)}</b> · ${fmtD(l.date,1)}<br><small style="color:var(--mut)">${esc(l.owner)} · ${esc(l.status)} · ${(+l.items||0)} action items</small></p>`).join(""):"<p>No meeting logs yet.</p>"))};
+$("#bell").onclick=()=>{const a=DATA.tasks.filter(t=>t.status==="Urgent"||t.status==="Pending approval");openModal("<h3>Needs your attention</h3>"+(a.length?a.map(t=>`<p style="color:var(--text);margin-bottom:8px"><span class="pill" style="--c:var(--${TONE[t.status]})">${esc(t.status)}</span> ${esc(t.title)}<br><small style="color:var(--mut)">${esc(t.owner)} · due ${fmtD(t.due)}</small></p>`).join(""):"<p>Nothing needs attention right now.</p>"))};
 
 /* ===== access, consent and legal ===== */
 const CONFIG={url:"https://qmkmypyqzhevtjsgjrxe.supabase.co",key:"sb_publishable_wFv2q2RURcwWYMEk1zN8Nw_fSKz4bm_",owner:"Natan Aquino",contact:"",version:"2026-11-05"};
@@ -425,7 +543,7 @@ const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const DRAFT="<p><b>Draft template.</b> Have it reviewed against the laws that apply to you before real clients use the app.</p>";
 const DOCS={
 privacy:["Privacy Policy",DRAFT+`<h4>Who runs this app</h4><p>${CONFIG.owner}. Contact: ${MAIL}.</p>
-<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Folders, documents, written notes and Google Drive or Google Docs links the owner adds in the Executive File area, kept in private storage that only the owner can open.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings and notes you or your team enter, once the app is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
+<h4>What we collect</h4><ul><li>Your email address and password. The password is handled by our sign-in provider (Supabase) and stored in hashed form.</li><li>When you agreed to these terms, and which version.</li><li>The invitation record: your email, a scrambled version of the code, and when it was used.</li><li>Folders, documents, written notes and Google Drive or Google Docs links the owner adds in the Executive File area, kept in private storage that only the owner can open.</li><li>Dashboard display settings chosen by the owner, such as the name, title and cover photo.</li><li>The tasks, meetings, meeting logs, resources and labels the owner enters in the dashboard, which only the owner can read, and anything else you or your team enter once it is connected to the database.</li></ul><p>We do not ask for your name, phone number, address or payment details.</p>
 <h4>Why we use it</h4><p>To create your account, check your invitation, show you your own workspace, and send reminders you ask for. We do not use it for advertising and we do not sell it.</p>
 <h4>Who else handles it</h4><ul><li>Supabase: database and sign-in.</li><li>GitHub Pages: hosts this page.</li><li>jsDelivr: delivers a script library to your browser, so it can see your IP address.</li></ul><p>These providers may keep technical logs, such as IP addresses.</p>
 <h4>How long we keep it</h4><p>While your account exists. Ask us to delete it and we will remove your account and its invitation record.</p>
@@ -442,7 +560,7 @@ terms:["Terms and Conditions",DRAFT+`<h4>Using the app</h4><p>Access is by invit
 <h4>Cost</h4><p>The app itself does not charge you. If that changes, we will tell you first.</p>
 <h4>Contact and governing law</h4><p>Questions: ${MAIL}. Governing law: [add the country whose law applies].</p>`],
 cookies:["Cookie Policy",DRAFT+`<h4>What this app stores in your browser</h4><p>This app uses browser storage. It does not use advertising or tracking cookies. Everything below is needed for the app to work or to remember your choices.</p>
-<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cfg</b>: your color theme, your world clock cities and, on the owner's device, a copy of the dashboard settings.</li><li><b>ed.fold</b>: which folders you have collapsed.</li><li><b>ed.tasks</b>: sample task statuses in the demo.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
+<ul><li><b>Sign-in session</b> (set by Supabase): keeps you signed in. Removed when you sign out.</li><li><b>ed.theme, ed.slots, ed.cfg</b>: your color theme, your world clock cities and, on the owner's device, a copy of the dashboard settings.</li><li><b>ed.fold</b>: which folders you have collapsed.</li><li><b>ed.data</b>: a copy of the dashboard records (tasks, meetings, logs, resources and labels) on the owner's device.</li><li><b>ed.cookieOK</b>: remembers that you saw the cookie notice.</li></ul>
 <h4>What we do not use</h4><p>No analytics, no advertising and no social media trackers.</p>
 <h4>Your choices</h4><p>Sign out to remove the session. You can clear the rest in your browser settings, and the app will forget your preferences. Because this storage is essential, there is nothing to switch off. If we add anything optional later, we will ask first.</p>`]};
 function openDoc(k){openModal("<h3>"+DOCS[k][0]+'</h3><div class="doc">'+DOCS[k][1]+"</div>",true)}
@@ -498,7 +616,7 @@ async function route(){
   role=data&&data.role;
   if(role==="client"||role==="owner")unlock();else gate("code");
 }
-function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#editBtn").hidden=role!=="owner";loadCfg();$("#main").focus()}
+function unlock(){$("#gate").hidden=true;$("#app").hidden=false;$("#editBtn").hidden=role!=="owner";$("#editTextBtn").hidden=role!=="owner";document.body.toggleAttribute("data-owner",role==="owner");loadCfg();loadData();$("#main").focus()}
 async function signOut(){if(sb)await sb.auth.signOut();role=null;$("#app").hidden=true;gate(DEMO?"signup":"login")}
 $("#signOut").onclick=signOut;
 async function start(){
@@ -522,7 +640,7 @@ function inviteUI(){
   };
 }
 
-applyTheme();buildClock();setInterval(tick,1000);kpis();tasks();logs();start();
+applyTheme();buildClock();setInterval(tick,1000);renderAll();start();
 </script>
 </body>
 </html>
